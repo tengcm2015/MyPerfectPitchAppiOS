@@ -1,28 +1,50 @@
-//
-//  GameScene.swift
-//  MyPerfectPitchAppiOS
-//
-//  Created by tengcm on 2017/7/8.
-//  Copyright © 2017年 tengcm. All rights reserved.
-//
-
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class DifficultyMenuScene: SKScene {
     
-    private var label : SKLabelNode?
+    private var title : SKLabelNode?
+	private var easy : SKLabelNode?
+	private var normal : SKLabelNode?
+	private var hard : SKLabelNode?
+	private var lunatic : SKLabelNode?
+	
     private var spinnyNode : SKShapeNode?
     
     override func didMove(to view: SKView) {
         
         // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
+        self.title = self.childNode(withName: "//title") as? SKLabelNode
+		self.easy = self.childNode(withName: "//easy") as? SKLabelNode
+		self.normal = self.childNode(withName: "//normal") as? SKLabelNode
+		self.hard = self.childNode(withName: "//hard") as? SKLabelNode
+		self.lunatic = self.childNode(withName: "//lunatic") as? SKLabelNode
+		
+        if let label = self.title {
             label.alpha = 0.0
             label.run(SKAction.fadeIn(withDuration: 2.0))
         }
         
+		if let label = self.easy {
+			label.alpha = 0.0
+			label.run(SKAction.fadeIn(withDuration: 2.0))
+		}
+		
+		if let label = self.normal {
+			label.alpha = 0.0
+			label.run(SKAction.fadeIn(withDuration: 2.0))
+		}
+		
+		if let label = self.hard {
+			label.alpha = 0.0
+			label.run(SKAction.fadeIn(withDuration: 2.0))
+		}
+		
+		if let label = self.lunatic {
+			label.alpha = 0.0
+			label.run(SKAction.fadeIn(withDuration: 2.0))
+		}
+		
         // Create shape node to use during mouse interaction
         let w = (self.size.width + self.size.height) * 0.05
         self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
@@ -63,10 +85,6 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
-        
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     

@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  MyPerfectPitchAppiOS
-//
-//  Created by tengcm on 2017/7/8.
-//  Copyright © 2017年 tengcm. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain
