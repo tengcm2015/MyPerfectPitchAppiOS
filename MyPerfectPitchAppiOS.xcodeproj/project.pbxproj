@@ -21,6 +21,8 @@
 		9CB1C3E11F10663700F3C01A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CB1C3DF1F10663700F3C01A /* Main.storyboard */; };
 		9CB1C3E31F10663700F3C01A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CB1C3E21F10663700F3C01A /* Assets.xcassets */; };
 		9CB1C3E61F10663700F3C01A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CB1C3E41F10663700F3C01A /* LaunchScreen.storyboard */; };
+		9CE650601F135D5300E2A81A /* SettingsScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9CE6505E1F135D5300E2A81A /* SettingsScene.sks */; };
+		9CE650611F135D5300E2A81A /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE6505F1F135D5300E2A81A /* SettingsScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		9CB1C3E21F10663700F3C01A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9CB1C3E51F10663700F3C01A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9CB1C3E71F10663700F3C01A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9CE6505E1F135D5300E2A81A /* SettingsScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = SettingsScene.sks; path = Scenes/SettingsScene.sks; sourceTree = "<group>"; };
+		9CE6505F1F135D5300E2A81A /* SettingsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsScene.swift; path = Scenes/SettingsScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,14 +60,16 @@
 		9C3E04F21F11C8C300339A92 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				9C3E04F91F11C94600339A92 /* StartMenuScene.sks */,
+				9C3E04FA1F11C94600339A92 /* StartMenuScene.swift */,
+				9CE6505E1F135D5300E2A81A /* SettingsScene.sks */,
+				9CE6505F1F135D5300E2A81A /* SettingsScene.swift */,
 				9C3E04F31F11C94600339A92 /* DifficultyMenuScene.sks */,
 				9C3E04F41F11C94600339A92 /* DifficultyMenuScene.swift */,
 				9C3E04F51F11C94600339A92 /* QuestionScene.sks */,
 				9C3E04F61F11C94600339A92 /* QuestionScene.swift */,
 				9C3E04F71F11C94600339A92 /* ResultScene.sks */,
 				9C3E04F81F11C94600339A92 /* ResultScene.swift */,
-				9C3E04F91F11C94600339A92 /* StartMenuScene.sks */,
-				9C3E04FA1F11C94600339A92 /* StartMenuScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -159,6 +165,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CE650601F135D5300E2A81A /* SettingsScene.sks in Resources */,
 				9C3E04FF1F11C94600339A92 /* ResultScene.sks in Resources */,
 				9CB1C3E11F10663700F3C01A /* Main.storyboard in Resources */,
 				9C3E05011F11C94600339A92 /* StartMenuScene.sks in Resources */,
@@ -178,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C3E05021F11C94600339A92 /* StartMenuScene.swift in Sources */,
+				9CE650611F135D5300E2A81A /* SettingsScene.swift in Sources */,
 				9CB1C3DE1F10663700F3C01A /* GameViewController.swift in Sources */,
 				9C3E04FE1F11C94600339A92 /* QuestionScene.swift in Sources */,
 				9C3E04FC1F11C94600339A92 /* DifficultyMenuScene.swift in Sources */,

@@ -5,21 +5,93 @@ class Keyboard {
 	
 	//MARK: Properties
 	
-	var node : SKNode
+	private var node : SKNode
+	private var C : SKNode?
+	private var D : SKNode?
+	private var E : SKNode?
+	private var F : SKNode?
+	private var G : SKNode?
+	private var A : SKNode?
+	private var B : SKNode?
+	private var Cs : SKNode?
+	private var Ds : SKNode?
+	private var Fs : SKNode?
+	private var Gs : SKNode?
+	private var As : SKNode?
 	
 	init (_ node: SKNode) {
 		self.node = node
+		self.C = node.childNode(withName: "//C")
+		self.D = node.childNode(withName: "//D")
+		self.E = node.childNode(withName: "//E")
+		self.F = node.childNode(withName: "//F")
+		self.G = node.childNode(withName: "//G")
+		self.A = node.childNode(withName: "//A")
+		self.B = node.childNode(withName: "//B")
+		self.Cs = node.childNode(withName: "//C#")
+		self.Ds = node.childNode(withName: "//D#")
+		self.Fs = node.childNode(withName: "//F#")
+		self.Gs = node.childNode(withName: "//G#")
+		self.As = node.childNode(withName: "//A#")
+	}
+	
+	func hide () {
+		node.isHidden = true
+	}
+	
+	func show () {
+		node.isHidden = false
 	}
 	
 	func appearAnimation () {
-		for child in self.node.children {
+		for child in node.children {
 			child.alpha = 0.0
 			child.run(SKAction.fadeIn(withDuration: 1.0))
 		}
 	}
 	
 	func dismissAnimation () {
-		for child in self.node.children {
+		for child in node.children {
+			child.run(SKAction.fadeOut(withDuration: 1.0))
+		}
+	}
+}
+
+class PauseMenu {
+	
+	//MARK: Properties
+	
+	private var node : SKNode
+	private var retry : SKLabelNode?
+	private var difficulty : SKLabelNode?
+	private var mainMenu : SKLabelNode?
+	private var resume : SKLabelNode?
+	
+	init (_ node: SKNode) {
+		self.node = node
+		self.retry		= node.childNode(withName: "//retry"	 ) as? SKLabelNode
+		self.difficulty = node.childNode(withName: "//difficulty") as? SKLabelNode
+		self.mainMenu	= node.childNode(withName: "//mainMenu"	 ) as? SKLabelNode
+		self.resume		= node.childNode(withName: "//resume"	 ) as? SKLabelNode
+	}
+	
+	func hide () {
+		node.isHidden = true
+	}
+	
+	func show () {
+		node.isHidden = false
+	}
+	
+	func appearAnimation () {
+		for child in node.children {
+			child.alpha = 0.0
+			child.run(SKAction.fadeIn(withDuration: 1.0))
+		}
+	}
+	
+	func dismissAnimation () {
+		for child in node.children {
 			child.run(SKAction.fadeOut(withDuration: 1.0))
 		}
 	}
@@ -38,22 +110,29 @@ class QuestionScene: SKScene {
 	private var difficultyNode : SKLabelNode?
 	private var quit : SKLabelNode?
 	private var keyboard : Keyboard?
+	private var pauseMenu : PauseMenu?
 	
 	private var spinnyNode : SKShapeNode?
 	
 	override func didMove(to view: SKView) {
 		
 		// Get label nodes from scene and store it for use later
-		self.title = self.childNode(withName: "//title") as? SKLabelNode
-		self.status = self.childNode(withName: "//status") as? SKLabelNode
-		self.confirm = self.childNode(withName: "//confirm") as? SKLabelNode
+		self.title			= self.childNode(withName: "//title"	 ) as? SKLabelNode
+		self.status			= self.childNode(withName: "//status"	 ) as? SKLabelNode
+		self.confirm		= self.childNode(withName: "//confirm"	 ) as? SKLabelNode
 		self.difficultyNode = self.childNode(withName: "//difficulty") as? SKLabelNode
-		self.quit = self.childNode(withName: "//quit") as? SKLabelNode
-		self.keyboard = Keyboard(self.childNode(withName: "//keyboard")!)
+		self.quit			= self.childNode(withName: "//quit"		 ) as? SKLabelNode
+		self.keyboard		= Keyboard (self.childNode(withName: "//keyboard")!)
+		self.pauseMenu		= PauseMenu(self.childNode(withName: "//pauseMenu")!)
 		
-		if let difficulty = self.difficulty {
-			self.difficultyNode?.text = difficulty
+		if pauseMenu != nil {
+			pauseMenu?.hide()
 		}
+
+		if difficultyNode != nil {
+			difficultyNode?.text = difficulty
+		}
+		
 		appearAnimation()
 		
 		// Create shape node to use during mouse interaction
