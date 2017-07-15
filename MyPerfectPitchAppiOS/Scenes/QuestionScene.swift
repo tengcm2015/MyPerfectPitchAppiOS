@@ -44,16 +44,38 @@ class Keyboard {
 	}
 
 	func appearAnimation () {
-		for child in node.children {
-			child.alpha = 0.0
-			child.run(SKAction.fadeIn(withDuration: 1.0))
+		appearAnimation {
+			print("keyboard appeared")
 		}
 	}
-
-	func dismissAnimation () {
-		for child in node.children {
-			child.run(SKAction.fadeOut(withDuration: 1.0))
+	
+	func appearAnimation(_ completion: @escaping () -> Void) {
+		for (i, child) in node.children.enumerated() {
+			child.alpha = 0.0
+			child.run(SKAction.sequence([
+				SKAction.wait(forDuration: 0.1 * Double(i)),
+				SKAction.fadeIn(withDuration: 1.0)
+			]), completion: completion)
 		}
+	}
+	
+	func dismissAnimation () {
+		dismissAnimation {
+			print("keyboard dismissed")
+		}
+	}
+	
+	func dismissAnimation(_ completion: @escaping () -> Void) {
+		for (i, child) in node.children.enumerated() {
+			child.run(SKAction.sequence([
+				SKAction.wait(forDuration: 0.1 * Double(i)),
+				SKAction.fadeOut(withDuration: 1.0)
+			]), completion: completion)
+		}
+	}
+	
+	func clicked(_ nodes: [SKNode]) -> SKNode? {
+		return nodes.last
 	}
 }
 
@@ -84,16 +106,38 @@ class PauseMenu {
 	}
 
 	func appearAnimation () {
-		for child in node.children {
+		appearAnimation {
+			print("pause menu appeared")
+		}
+	}
+	
+	func appearAnimation(_ completion: @escaping () -> Void) {
+		for (i, child) in node.children.enumerated() {
 			child.alpha = 0.0
-			child.run(SKAction.fadeIn(withDuration: 1.0))
+			child.run(SKAction.sequence([
+				SKAction.wait(forDuration: 0.1 * Double(i)),
+				SKAction.fadeIn(withDuration: 1.0)
+			]), completion: completion)
 		}
 	}
 
 	func dismissAnimation () {
-		for child in node.children {
-			child.run(SKAction.fadeOut(withDuration: 1.0))
+		dismissAnimation {
+			print("pause menu dismissed")
 		}
+	}
+	
+	func dismissAnimation(_ completion: @escaping () -> Void) {
+		for (i, child) in node.children.enumerated() {
+			child.run(SKAction.sequence([
+				SKAction.wait(forDuration: 0.1 * Double(i)),
+				SKAction.fadeOut(withDuration: 1.0)
+			]), completion: completion)
+		}
+	}
+
+	func clicked(_ nodes: [SKNode]) -> SKNode? {
+		return nodes.last
 	}
 }
 
@@ -104,13 +148,13 @@ class QuestionScene: SKScene {
 	var score : Int = 0
 	var difficulty : String?
 
-	private var title : SKLabelNode?
-	private var status : SKLabelNode?
-	private var confirm : SKLabelNode?
-	private var difficultyNode : SKLabelNode?
-	private var quit : SKLabelNode?
-	private var keyboard : Keyboard?
-	private var pauseMenu : PauseMenu?
+	private var title			: SKLabelNode?
+	private var status			: SKLabelNode?
+	private var difficultyNode	: SKLabelNode?
+	private var confirm			: SKLabelNode?
+	private var pauseNode		: SKLabelNode?
+	private var keyboard		: Keyboard?
+	private var pauseMenu		: PauseMenu?
 
 	private var spinnyNode : SKShapeNode?
 
@@ -119,9 +163,9 @@ class QuestionScene: SKScene {
 		// Get label nodes from scene and store it for use later
 		self.title			= self.childNode(withName: "//title"	 ) as? SKLabelNode
 		self.status			= self.childNode(withName: "//status"	 ) as? SKLabelNode
-		self.confirm		= self.childNode(withName: "//confirm"	 ) as? SKLabelNode
 		self.difficultyNode = self.childNode(withName: "//difficulty") as? SKLabelNode
-		self.quit			= self.childNode(withName: "//quit"		 ) as? SKLabelNode
+		self.confirm		= self.childNode(withName: "//confirm"	 ) as? SKLabelNode
+		self.pauseNode		= self.childNode(withName: "//pause"	 ) as? SKLabelNode
 		self.keyboard		= Keyboard (self.childNode(withName: "//keyboard")!)
 		self.pauseMenu		= PauseMenu(self.childNode(withName: "//pauseMenu")!)
 
@@ -137,15 +181,23 @@ class QuestionScene: SKScene {
 
 		// Create shape node to use during mouse interaction
 		let w = (self.size.width + self.size.height) * 0.05
-		self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
+		self.spinnyNode = SKShapeNode.init(
+			rectOf: CGSize.init(width: w, height: w),
+			cornerRadius: w * 0.3
+		)
 
 		if let spinnyNode = self.spinnyNode {
 			spinnyNode.lineWidth = 2.5
 
-			spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-			spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-											  SKAction.fadeOut(withDuration: 0.5),
-											  SKAction.removeFromParent()]))
+			spinnyNode.run(SKAction.repeatForever(
+				SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)
+			))
+			
+			spinnyNode.run(SKAction.sequence([
+				SKAction.wait(forDuration: 0.5),
+				SKAction.fadeOut(withDuration: 0.5),
+				SKAction.removeFromParent()
+			]))
 		}
 	}
 
@@ -184,7 +236,7 @@ class QuestionScene: SKScene {
 			label.run(SKAction.fadeIn(withDuration: 1.0))
 		}
 
-		if self.keyboard != nil {
+		if keyboard != nil {
 			self.keyboard?.appearAnimation()
 		}
 
@@ -196,6 +248,14 @@ class QuestionScene: SKScene {
 			]))
 		}
 
+		if let label = self.difficultyNode {
+			label.alpha = 0.0
+			label.run(SKAction.sequence([
+				SKAction.wait(forDuration: 0.2),
+				SKAction.fadeIn(withDuration: 1.0)
+				]))
+		}
+		
 		if let label = self.confirm {
 			label.alpha = 0.0
 			label.run(SKAction.sequence([
@@ -204,15 +264,7 @@ class QuestionScene: SKScene {
 			]))
 		}
 
-		if let label = self.difficultyNode {
-			label.alpha = 0.0
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.6),
-				SKAction.fadeIn(withDuration: 1.0)
-			]))
-		}
-
-		if let label = self.quit {
+		if let label = self.pauseNode {
 			label.alpha = 0.0
 			label.run(SKAction.sequence([
 				SKAction.wait(forDuration: 0.6),
@@ -257,7 +309,7 @@ class QuestionScene: SKScene {
 			]))
 		}
 
-		if let label = self.quit {
+		if let label = self.pauseNode {
 			label.run(SKAction.sequence([
 				SKAction.wait(forDuration: 0.6),
 				SKAction.fadeOut(withDuration: 1.0)
@@ -288,23 +340,127 @@ class QuestionScene: SKScene {
 			self.addChild(n)
 		}
 
-		let node = self.nodes(at: pos).last
-		if let name = node?.name {
+		var nodes = self.nodes(at: pos)
+		let leastRecentRendered = nodes.removeLast()
+		
+		if let name = leastRecentRendered.name {
 			switch name {
+			case "keyboard":
+				let clicked = keyboard?.clicked(nodes)
+				if let clickName = clicked?.name {
+					print(clickName)
+				}
+				break
+			case "pauseMenu":
+				let clicked = pauseMenu?.clicked(nodes)
+				if let clickName = clicked?.name {
+					switch clickName {
+					case "retry":
+						retry()
+						break
+					case "difficulty":
+						goToDifficultyScene()
+						break
+					case "mainMenu":
+						goToStartMenuScene()
+						break
+					case "resume":
+						resume()
+						break
+					default:
+						print(clickName)
+						break
+					}
+				}
+				break
 			case "confirm":
 				score += 1
+				goToResultScene("Well Done!")
 				break
-			case "quit":
-				goToResultScene("Well done!")
-				break
-			case "keyboard":
+			case "pause":
+				pause()
 				break
 			default:
+				print(name)
 				break
 			}
 		}
 	}
 
+	private func pause() {
+		if let label = self.confirm {
+			label.run(
+				SKAction.fadeOut(withDuration: 1.0),
+				completion: {
+					label.isHidden = true
+				}
+			)
+		}
+		
+		if let label = self.pauseNode {
+			label.run(
+				SKAction.fadeOut(withDuration: 1.0),
+				completion: {
+					label.isHidden = true
+				}
+			)
+		}
+		
+		keyboard?.dismissAnimation {
+			self.keyboard?.hide()
+			self.pauseMenu?.show()
+			self.pauseMenu?.appearAnimation()
+		}
+	}
+	
+	private func resume() {
+		pauseMenu?.dismissAnimation {
+			self.pauseMenu?.hide()
+			self.keyboard?.show()
+			self.keyboard?.appearAnimation()
+
+			if let label = self.confirm {
+				label.isHidden = false
+				label.alpha = 0.0
+				label.run(SKAction.fadeIn(withDuration: 1.0))
+			}
+			
+			if let label = self.pauseNode {
+				label.isHidden = false
+				label.alpha = 0.0
+				label.run(SKAction.fadeIn(withDuration: 1.0))
+			}
+			
+		}
+	}
+	
+	private func retry() {
+		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
+			scene.score = 0
+			scene.difficulty = difficulty
+			
+			// Set the scale mode to scale to fit the window
+			scene.scaleMode = .aspectFill
+			
+			dismissAnimation {
+				// Present the scene
+				self.view?.presentScene(scene)
+			}
+		}
+	}
+	
+	private func goToDifficultyScene() {
+		if let scene = SKScene(fileNamed: "DifficultyMenuScene") as? DifficultyMenuScene {
+			// Set the scale mode to scale to fit the window
+			scene.scaleMode = .aspectFill
+			
+			dismissAnimation {
+				// Present the scene
+				self.view?.presentScene(scene)
+			}
+		}
+	}
+	
 	private func goToStartMenuScene() {
 		if let scene = SKScene(fileNamed: "StartMenuScene") as? StartMenuScene {
 			// Set the scale mode to scale to fit the window

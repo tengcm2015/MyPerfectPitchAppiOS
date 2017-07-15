@@ -5,10 +5,11 @@ class StartMenuScene: SKScene {
 
 	//MARK: Properties
 
-	private var title : SKLabelNode?
-	private var training : SKLabelNode?
-	private var test : SKLabelNode?
-	private var vs : SKLabelNode?
+	private var title		: SKLabelNode?
+	private var training	: SKLabelNode?
+	private var test		: SKLabelNode?
+	private var vs			: SKLabelNode?
+	private var setting		: SKLabelNode?
 
 	private var spinnyNode : SKShapeNode?
 
@@ -19,6 +20,7 @@ class StartMenuScene: SKScene {
 		self.training = self.childNode(withName: "//training") as? SKLabelNode
 		self.test 	  = self.childNode(withName: "//test"	 ) as? SKLabelNode
 		self.vs 	  = self.childNode(withName: "//vs"		 ) as? SKLabelNode
+		self.setting  = self.childNode(withName: "//setting" ) as? SKLabelNode
 
 		appearAnimation()
 
@@ -102,6 +104,14 @@ class StartMenuScene: SKScene {
 				SKAction.fadeIn(withDuration: 1.0)
 			]), completion: completion)
 		}
+
+		if let label = self.setting {
+			label.alpha = 0.0
+			label.run(SKAction.sequence([
+				SKAction.wait(forDuration: 0.8),
+				SKAction.fadeIn(withDuration: 1.0)
+			]), completion: completion)
+		}
 	}
 
 	private func dismissAnimation() {
@@ -132,6 +142,13 @@ class StartMenuScene: SKScene {
 		if let label = self.vs {
 			label.run(SKAction.sequence([
 				SKAction.wait(forDuration: 0.6),
+				SKAction.fadeOut(withDuration: 1.0)
+			]), completion: completion)
+		}
+
+		if let label = self.setting {
+			label.run(SKAction.sequence([
+				SKAction.wait(forDuration: 0.8),
 				SKAction.fadeOut(withDuration: 1.0)
 			]), completion: completion)
 		}
