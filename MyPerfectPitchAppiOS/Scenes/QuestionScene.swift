@@ -141,7 +141,7 @@ class PauseMenu {
 	}
 }
 
-class QuestionScene: SKScene {
+class QuestionScene: MasterScene {
 
 	//MARK: Properties
 
@@ -159,6 +159,7 @@ class QuestionScene: SKScene {
 	private var spinnyNode : SKShapeNode?
 
 	override func didMove(to view: SKView) {
+		super.didMove(to: view)
 
 		// Get label nodes from scene and store it for use later
 		self.title			= self.childNode(withName: "//title"	 ) as? SKLabelNode
@@ -179,50 +180,165 @@ class QuestionScene: SKScene {
 
 		appearAnimation()
 
-		// Create shape node to use during mouse interaction
-		let w = (self.size.width + self.size.height) * 0.05
-		self.spinnyNode = SKShapeNode.init(
-			rectOf: CGSize.init(width: w, height: w),
-			cornerRadius: w * 0.3
-		)
+	}
 
-		if let spinnyNode = self.spinnyNode {
-			spinnyNode.lineWidth = 2.5
-
-			spinnyNode.run(SKAction.repeatForever(
-				SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)
-			))
+	override func handleClick(_ nodes: [SKNode]) {
+		let node = nodes.last
+		if let name = node?.name {
+			switch name {
+			case "keyboard":
+				var tmp = nodes
+				tmp.removeLast()
+				let clicked = keyboard?.clicked(tmp)
+				if let clickName = clicked?.name {
+					print(clickName)
+				}
+				break
+			case "pauseMenu":
+				var tmp = nodes
+				tmp.removeLast()
+				let clicked = pauseMenu?.clicked(tmp)
+				if let clickName = clicked?.name {
+					switch clickName {
+					case "retry":
+						retry()
+						break
+					case "difficulty":
+						goToDifficultyScene()
+						break
+					case "mainMenu":
+						goToStartMenuScene()
+						break
+					case "resume":
+						resume()
+						break
+					default:
+						print(clickName)
+						break
+					}
+				}
+				break
+			case "confirm":
+				score += 1
+				goToResultScene("Well Done!")
+				break
+			case "pause":
+				pause()
+				break
+			default:
+				print(name)
+				break
+			}
+		}
+	}
+	
+	//MARK: Private Methods
+	
+	private func pause() {
+		if let label = self.confirm {
+			label.run(
+				SKAction.fadeOut(withDuration: 1.0),
+				completion: {
+					label.isHidden = true
+				}
+			)
+		}
+		
+		if let label = self.pauseNode {
+			label.run(
+				SKAction.fadeOut(withDuration: 1.0),
+				completion: {
+					label.isHidden = true
+				}
+			)
+		}
+		
+		keyboard?.dismissAnimation {
+			self.keyboard?.hide()
+			self.pauseMenu?.show()
+			self.pauseMenu?.appearAnimation()
+		}
+	}
+	
+	private func resume() {
+		pauseMenu?.dismissAnimation {
+			self.pauseMenu?.hide()
+			self.keyboard?.show()
+			self.keyboard?.appearAnimation()
 			
-			spinnyNode.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.5),
-				SKAction.fadeOut(withDuration: 0.5),
-				SKAction.removeFromParent()
-			]))
+			if let label = self.confirm {
+				label.isHidden = false
+				label.alpha = 0.0
+				label.run(SKAction.fadeIn(withDuration: 1.0))
+			}
+			
+			if let label = self.pauseNode {
+				label.isHidden = false
+				label.alpha = 0.0
+				label.run(SKAction.fadeIn(withDuration: 1.0))
+			}
+			
+		}
+	}
+	
+	private func retry() {
+		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
+			scene.score = 0
+			scene.difficulty = difficulty
+			
+			// Set the scale mode to scale to fit the window
+			scene.scaleMode = .aspectFill
+			
+			dismissAnimation {
+				// Present the scene
+				self.view?.presentScene(scene)
+			}
+		}
+	}
+	
+	//MARK: Scene Transitions
+	
+	private func goToDifficultyScene() {
+		if let scene = SKScene(fileNamed: "DifficultyMenuScene") as? DifficultyMenuScene {
+			// Set the scale mode to scale to fit the window
+			scene.scaleMode = .aspectFill
+			
+			dismissAnimation {
+				// Present the scene
+				self.view?.presentScene(scene)
+			}
+		}
+	}
+	
+	private func goToStartMenuScene() {
+		if let scene = SKScene(fileNamed: "StartMenuScene") as? StartMenuScene {
+			// Set the scale mode to scale to fit the window
+			scene.scaleMode = .aspectFill
+			
+			dismissAnimation {
+				// Present the scene
+				self.view?.presentScene(scene)
+			}
+		}
+	}
+	
+	private func goToResultScene(_ message : String) {
+		if let scene = SKScene(fileNamed: "ResultScene") as? ResultScene {
+			scene.score = self.score
+			scene.message = message
+			scene.difficulty = self.difficulty!
+			
+			// Set the scale mode to scale to fit the window
+			scene.scaleMode = .aspectFill
+			
+			dismissAnimation {
+				// Present the scene
+				self.view?.presentScene(scene)
+			}
 		}
 	}
 
-	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-		for t in touches { self.touchDown(atPoint: t.location(in: self)) }
-	}
-
-	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-		for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
-	}
-
-	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-		for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-	}
-
-	override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-		for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-	}
-
-
-	override func update(_ currentTime: TimeInterval) {
-		// Called before each frame is rendered
-	}
-
-	//MARK: Private Methods
+	//MARK: Animations
 
 	private func appearAnimation() {
 		appearAnimation {
@@ -317,175 +433,4 @@ class QuestionScene: SKScene {
 		}
 	}
 
-	private func touchDown(atPoint pos : CGPoint) {
-		if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-			n.position = pos
-			n.strokeColor = SKColor.green
-			self.addChild(n)
-		}
-	}
-
-	private func touchMoved(toPoint pos : CGPoint) {
-		if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-			n.position = pos
-			n.strokeColor = SKColor.blue
-			self.addChild(n)
-		}
-	}
-
-	private func touchUp(atPoint pos : CGPoint) {
-		if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-			n.position = pos
-			n.strokeColor = SKColor.red
-			self.addChild(n)
-		}
-
-		var nodes = self.nodes(at: pos)
-		let leastRecentRendered = nodes.removeLast()
-		
-		if let name = leastRecentRendered.name {
-			switch name {
-			case "keyboard":
-				let clicked = keyboard?.clicked(nodes)
-				if let clickName = clicked?.name {
-					print(clickName)
-				}
-				break
-			case "pauseMenu":
-				let clicked = pauseMenu?.clicked(nodes)
-				if let clickName = clicked?.name {
-					switch clickName {
-					case "retry":
-						retry()
-						break
-					case "difficulty":
-						goToDifficultyScene()
-						break
-					case "mainMenu":
-						goToStartMenuScene()
-						break
-					case "resume":
-						resume()
-						break
-					default:
-						print(clickName)
-						break
-					}
-				}
-				break
-			case "confirm":
-				score += 1
-				goToResultScene("Well Done!")
-				break
-			case "pause":
-				pause()
-				break
-			default:
-				print(name)
-				break
-			}
-		}
-	}
-
-	private func pause() {
-		if let label = self.confirm {
-			label.run(
-				SKAction.fadeOut(withDuration: 1.0),
-				completion: {
-					label.isHidden = true
-				}
-			)
-		}
-		
-		if let label = self.pauseNode {
-			label.run(
-				SKAction.fadeOut(withDuration: 1.0),
-				completion: {
-					label.isHidden = true
-				}
-			)
-		}
-		
-		keyboard?.dismissAnimation {
-			self.keyboard?.hide()
-			self.pauseMenu?.show()
-			self.pauseMenu?.appearAnimation()
-		}
-	}
-	
-	private func resume() {
-		pauseMenu?.dismissAnimation {
-			self.pauseMenu?.hide()
-			self.keyboard?.show()
-			self.keyboard?.appearAnimation()
-
-			if let label = self.confirm {
-				label.isHidden = false
-				label.alpha = 0.0
-				label.run(SKAction.fadeIn(withDuration: 1.0))
-			}
-			
-			if let label = self.pauseNode {
-				label.isHidden = false
-				label.alpha = 0.0
-				label.run(SKAction.fadeIn(withDuration: 1.0))
-			}
-			
-		}
-	}
-	
-	private func retry() {
-		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
-			scene.score = 0
-			scene.difficulty = difficulty
-			
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-			
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
-	}
-	
-	private func goToDifficultyScene() {
-		if let scene = SKScene(fileNamed: "DifficultyMenuScene") as? DifficultyMenuScene {
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-			
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
-	}
-	
-	private func goToStartMenuScene() {
-		if let scene = SKScene(fileNamed: "StartMenuScene") as? StartMenuScene {
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
-	}
-
-	private func goToResultScene(_ message : String) {
-		if let scene = SKScene(fileNamed: "ResultScene") as? ResultScene {
-			scene.score = self.score
-			scene.message = message
-			scene.difficulty = self.difficulty!
-
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
-	}
 }
