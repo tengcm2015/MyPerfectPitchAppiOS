@@ -55,7 +55,7 @@ class MasterScene: SKScene {
 	func handleClick(_ nodes: [SKNode]) {
 		print(nodes)
 	}
-	
+
 	//MARK: Private Methods
 
 	private func touchDown(atPoint pos : CGPoint) {

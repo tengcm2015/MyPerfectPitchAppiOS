@@ -5,25 +5,24 @@ class StartMenuScene: MasterScene {
 
 	//MARK: Properties
 
-	private var title		: SKLabelNode?
-	private var training	: SKLabelNode?
-	private var test		: SKLabelNode?
-	private var vs			: SKLabelNode?
-	private var setting		: SKLabelNode?
+	private var title    : SKLabelNode?
+	private var training : SKLabelNode?
+	private var test     : SKLabelNode?
+	private var vs       : SKLabelNode?
+	private var setting  : SKLabelNode?
 
 	override func didMove(to view: SKView) {
 		super.didMove(to: view)
 
 		// Get label nodes from scene and store it for use later
-		self.title 	  = self.childNode(withName: "//title"	 ) as? SKLabelNode
+		self.title    = self.childNode(withName: "//title"   ) as? SKLabelNode
 		self.training = self.childNode(withName: "//training") as? SKLabelNode
-		self.test 	  = self.childNode(withName: "//test"	 ) as? SKLabelNode
-		self.vs 	  = self.childNode(withName: "//vs"		 ) as? SKLabelNode
+		self.test     = self.childNode(withName: "//test"    ) as? SKLabelNode
+		self.vs       = self.childNode(withName: "//vs"      ) as? SKLabelNode
 		self.setting  = self.childNode(withName: "//setting" ) as? SKLabelNode
 
 		appearAnimation()
 	}
-
 
 	override func handleClick(_ nodes: [SKNode]) {
 		let node = nodes.last
@@ -46,16 +45,16 @@ class StartMenuScene: MasterScene {
 			}
 		}
 	}
-	
+
 	//MARK: Scene Transitions
 
 	private func goToDiffcultyScene(_ mode : String) {
 		if let scene = SKScene(fileNamed: "DifficultyMenuScene") as? DifficultyMenuScene {
 			scene.mode = mode
-			
+
 			// Set the scale mode to scale to fit the window
 			scene.scaleMode = .aspectFill
-			
+
 			dismissAnimation {
 				// Present the scene
 				self.view?.presentScene(scene)
@@ -67,14 +66,14 @@ class StartMenuScene: MasterScene {
 		if let scene = SKScene(fileNamed: "SettingsScene") as? SettingsScene {
 			// Set the scale mode to scale to fit the window
 			scene.scaleMode = .aspectFill
-			
+
 			dismissAnimation {
 				// Present the scene
 				self.view?.presentScene(scene)
 			}
 		}
 	}
-	
+
 	//MARK: Animations
 
 	private func appearAnimation() {

@@ -5,21 +5,21 @@ class SettingsScene: MasterScene {
 
 	//MARK: Properties
 
-	private var title : SKLabelNode?
-	private var arrange : SKLabelNode?
-	private var keySign : SKLabelNode?
-	private var theme : SKLabelNode?
+	private var title    : SKLabelNode?
+	private var arrange  : SKLabelNode?
+	private var keySign  : SKLabelNode?
+	private var theme    : SKLabelNode?
 	private var mainMenu : SKLabelNode?
 
 	override func didMove(to view: SKView) {
 		super.didMove(to: view)
 
 		// Get label nodes from scene and store it for use later
-		self.title 	  = self.childNode(withName: "//title"	 ) as? SKLabelNode
+		self.title    = self.childNode(withName: "//title"   ) as? SKLabelNode
 		self.arrange  = self.childNode(withName: "//arrange" ) as? SKLabelNode
 		self.keySign  = self.childNode(withName: "//keySign" ) as? SKLabelNode
-		self.theme	  = self.childNode(withName: "//theme"	 ) as? SKLabelNode
-		self.mainMenu = self.childNode(withName: "//return"	 ) as? SKLabelNode
+		self.theme    = self.childNode(withName: "//theme"   ) as? SKLabelNode
+		self.mainMenu = self.childNode(withName: "//return"  ) as? SKLabelNode
 
 		appearAnimation()
 
@@ -39,12 +39,12 @@ class SettingsScene: MasterScene {
 	}
 
 	//MARK: Scene Transitions
-	
+
 	private func goToStartMenuScene() {
 		if let scene = SKScene(fileNamed: "StartMenuScene") as? StartMenuScene {
 			// Set the scale mode to scale to fit the window
 			scene.scaleMode = .aspectFill
-			
+
 			dismissAnimation {
 				// Present the scene
 				self.view?.presentScene(scene)

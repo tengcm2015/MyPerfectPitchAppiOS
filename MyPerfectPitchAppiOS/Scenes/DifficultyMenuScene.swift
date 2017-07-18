@@ -7,25 +7,25 @@ class DifficultyMenuScene: MasterScene {
 
 	var mode : String?
 
-	private var title : SKLabelNode?
+	private var title    : SKLabelNode?
 	private var subtitle : SKLabelNode?
-	private var easy : SKLabelNode?
-	private var normal : SKLabelNode?
-	private var hard : SKLabelNode?
-	private var lunatic : SKLabelNode?
-	private var menu : SKLabelNode?
+	private var easy     : SKLabelNode?
+	private var normal   : SKLabelNode?
+	private var hard     : SKLabelNode?
+	private var lunatic  : SKLabelNode?
+	private var menu     : SKLabelNode?
 
 	override func didMove(to view: SKView) {
 		super.didMove(to: view)
 
 		// Get label node from scene and store it for use later
-		self.title 		= self.childNode(withName: "//title"	) as? SKLabelNode
-		self.subtitle 	= self.childNode(withName: "//subtitle"	) as? SKLabelNode
-		self.easy 		= self.childNode(withName: "//easy"		) as? SKLabelNode
-		self.normal 	= self.childNode(withName: "//normal"	) as? SKLabelNode
-		self.hard 		= self.childNode(withName: "//hard"		) as? SKLabelNode
-		self.lunatic 	= self.childNode(withName: "//lunatic"	) as? SKLabelNode
-		self.menu 		= self.childNode(withName: "//return"	) as? SKLabelNode
+		self.title    = self.childNode(withName: "//title"    ) as? SKLabelNode
+		self.subtitle = self.childNode(withName: "//subtitle" ) as? SKLabelNode
+		self.easy     = self.childNode(withName: "//easy"     ) as? SKLabelNode
+		self.normal   = self.childNode(withName: "//normal"   ) as? SKLabelNode
+		self.hard     = self.childNode(withName: "//hard"     ) as? SKLabelNode
+		self.lunatic  = self.childNode(withName: "//lunatic"  ) as? SKLabelNode
+		self.menu     = self.childNode(withName: "//return"   ) as? SKLabelNode
 
 		if let titleText = self.mode {
 			print(titleText)
@@ -61,29 +61,29 @@ class DifficultyMenuScene: MasterScene {
 			}
 		}
 	}
-	
+
 	//MARK: Scene Trasitions
-	
+
 	private func goToStartMenuScene() {
 		if let scene = SKScene(fileNamed: "StartMenuScene") as? StartMenuScene {
 			// Set the scale mode to scale to fit the window
 			scene.scaleMode = .aspectFill
-			
+
 			dismissAnimation {
 				// Present the scene
 				self.view?.presentScene(scene)
 			}
 		}
 	}
-	
+
 	private func goToQuestionScene(_ difficulty : String) {
 		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
 			scene.score = 0
 			scene.difficulty = difficulty
-			
+
 			// Set the scale mode to scale to fit the window
 			scene.scaleMode = .aspectFill
-			
+
 			dismissAnimation {
 				// Present the scene
 				self.view?.presentScene(scene)

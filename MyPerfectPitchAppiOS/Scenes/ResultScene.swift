@@ -9,25 +9,23 @@ class ResultScene: MasterScene {
 	var message : String?
 	var difficulty : String?
 
-	private var title : SKLabelNode?
+	private var title          : SKLabelNode?
 	private var difficultyNode : SKLabelNode?
-	private var scoreNode : SKLabelNode?
-	private var messageNode : SKLabelNode?
-	private var retry : SKLabelNode?
-	private var menu : SKLabelNode?
-
-	private var spinnyNode : SKShapeNode?
+	private var scoreNode      : SKLabelNode?
+	private var messageNode    : SKLabelNode?
+	private var retry          : SKLabelNode?
+	private var menu           : SKLabelNode?
 
 	override func didMove(to view: SKView) {
 		super.didMove(to: view)
 
 		// Get label nodes from scene and store it for use later
-		self.title 			= self.childNode(withName: "//title"	  ) as? SKLabelNode
+		self.title          = self.childNode(withName: "//title"      ) as? SKLabelNode
 		self.difficultyNode = self.childNode(withName: "//difficulty" ) as? SKLabelNode
-		self.scoreNode 		= self.childNode(withName: "//score"	  ) as? SKLabelNode
-		self.messageNode 	= self.childNode(withName: "//message"	  ) as? SKLabelNode
-		self.retry 			= self.childNode(withName: "//retry"	  ) as? SKLabelNode
-		self.menu 			= self.childNode(withName: "//return"	  ) as? SKLabelNode
+		self.scoreNode      = self.childNode(withName: "//score"      ) as? SKLabelNode
+		self.messageNode    = self.childNode(withName: "//message"    ) as? SKLabelNode
+		self.retry          = self.childNode(withName: "//retry"      ) as? SKLabelNode
+		self.menu           = self.childNode(withName: "//return"     ) as? SKLabelNode
 
 		if let score = self.score {
 			self.scoreNode?.text = String(score)
@@ -38,6 +36,7 @@ class ResultScene: MasterScene {
 		if let difficulty = self.difficulty {
 			self.difficultyNode?.text = difficulty
 		}
+
 		appearAnimation()
 
 	}
@@ -61,27 +60,27 @@ class ResultScene: MasterScene {
 	}
 
 	//MARK: Scene Transitions
-	
+
 	private func goToStartMenuScene() {
 		if let scene = SKScene(fileNamed: "StartMenuScene") as? StartMenuScene {
 			// Set the scale mode to scale to fit the window
 			scene.scaleMode = .aspectFill
-			
+
 			dismissAnimation {
 				// Present the scene
 				self.view?.presentScene(scene)
 			}
 		}
 	}
-	
+
 	private func goToQuestionScene(_ difficulty : String) {
 		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
 			scene.score = 0
 			scene.difficulty = difficulty
-			
+
 			// Set the scale mode to scale to fit the window
 			scene.scaleMode = .aspectFill
-			
+
 			dismissAnimation {
 				// Present the scene
 				self.view?.presentScene(scene)
@@ -172,7 +171,7 @@ class ResultScene: MasterScene {
 
 		if let label = self.messageNode {
 			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.4),
+				SKAction.wait(forDuration: 0.6),
 				SKAction.fadeOut(withDuration: 1.0)
 			]))
 		}
