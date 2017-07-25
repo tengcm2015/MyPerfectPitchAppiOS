@@ -1,2 +1,2 @@
 # MyPerfectPitchAppiOS
-An iOS portation of [trainshogi/MyPerfectPitchApp](https://github.com/trainshogi/MyPerfectPitchApp)
+An iOS port of [trainshogi/MyPerfectPitchApp](https://github.com/trainshogi/MyPerfectPitchApp)
