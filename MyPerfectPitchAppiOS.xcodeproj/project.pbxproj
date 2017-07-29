@@ -15,6 +15,7 @@
 		9C3E05001F11C94600339A92 /* ResultScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3E04F81F11C94600339A92 /* ResultScene.swift */; };
 		9C3E05011F11C94600339A92 /* StartMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C3E04F91F11C94600339A92 /* StartMenuScene.sks */; };
 		9C3E05021F11C94600339A92 /* StartMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3E04FA1F11C94600339A92 /* StartMenuScene.swift */; };
+		9C7E344A1F2C184B00DD723E /* MusicNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7E34491F2C184B00DD723E /* MusicNode.swift */; };
 		9CA2F1EC1F19AF6500F376D0 /* MasterScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA2F1EB1F19AF6500F376D0 /* MasterScene.swift */; };
 		9CB1C3D61F10663700F3C01A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1C3D51F10663700F3C01A /* AppDelegate.swift */; };
 		9CB1C3DA1F10663700F3C01A /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9CB1C3D91F10663700F3C01A /* Actions.sks */; };
@@ -35,6 +36,7 @@
 		9C3E04F81F11C94600339A92 /* ResultScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultScene.swift; path = Scenes/ResultScene.swift; sourceTree = "<group>"; };
 		9C3E04F91F11C94600339A92 /* StartMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = StartMenuScene.sks; path = Scenes/StartMenuScene.sks; sourceTree = "<group>"; };
 		9C3E04FA1F11C94600339A92 /* StartMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StartMenuScene.swift; path = Scenes/StartMenuScene.swift; sourceTree = "<group>"; };
+		9C7E34491F2C184B00DD723E /* MusicNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicNode.swift; sourceTree = "<group>"; };
 		9CA2F1EB1F19AF6500F376D0 /* MasterScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MasterScene.swift; path = Scenes/MasterScene.swift; sourceTree = "<group>"; };
 		9CB1C3D21F10663700F3C01A /* MyPerfectPitchAppiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyPerfectPitchAppiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB1C3D51F10663700F3C01A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +79,14 @@
 			name = Scenes;
 			sourceTree = "<group>";
 		};
+		9C7E34461F2BDCEA00DD723E /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				9C7E34491F2C184B00DD723E /* MusicNode.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
 		9CB1C3C91F10663600F3C01A = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +106,7 @@
 		9CB1C3D41F10663700F3C01A /* MyPerfectPitchAppiOS */ = {
 			isa = PBXGroup;
 			children = (
+				9C7E34461F2BDCEA00DD723E /* Library */,
 				9C3E04F21F11C8C300339A92 /* Scenes */,
 				9CB1C3D51F10663700F3C01A /* AppDelegate.swift */,
 				9CB1C3D91F10663700F3C01A /* Actions.sks */,
@@ -193,6 +204,7 @@
 				9C3E04FE1F11C94600339A92 /* QuestionScene.swift in Sources */,
 				9C3E04FC1F11C94600339A92 /* DifficultyMenuScene.swift in Sources */,
 				9C3E05001F11C94600339A92 /* ResultScene.swift in Sources */,
+				9C7E344A1F2C184B00DD723E /* MusicNode.swift in Sources */,
 				9CA2F1EC1F19AF6500F376D0 /* MasterScene.swift in Sources */,
 				9CB1C3D61F10663700F3C01A /* AppDelegate.swift in Sources */,
 			);

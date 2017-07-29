@@ -185,8 +185,7 @@ class QuestionScene: MasterScene {
 	var difficulty : String?
 
 	private var title          : SKLabelNode?
-	private var status         : SKLabelNode?
-	private var difficultyNode : SKLabelNode?
+	private var musicNode      : MusicNode?
 	private var confirm        : SKLabelNode?
 	private var pauseNode      : SKLabelNode?
 	private var keyboard       : Keyboard?
@@ -197,8 +196,7 @@ class QuestionScene: MasterScene {
 
 		// Get label nodes from scene and store it for use later
 		self.title          = self.childNode(withName: "//title"     ) as? SKLabelNode
-		self.status         = self.childNode(withName: "//status"    ) as? SKLabelNode
-		self.difficultyNode = self.childNode(withName: "//difficulty") as? SKLabelNode
+		self.musicNode      = self.childNode(withName: "//musicNode" ) as? MusicNode
 		self.confirm        = self.childNode(withName: "//confirm"   ) as? SKLabelNode
 		self.pauseNode      = self.childNode(withName: "//pause"     ) as? SKLabelNode
 		self.keyboard       = Keyboard (self.childNode(withName: "//keyboard")!)
@@ -208,12 +206,18 @@ class QuestionScene: MasterScene {
 			pauseMenu?.hide()
 		}
 
-		if difficultyNode != nil {
-			difficultyNode?.text = difficulty
+		if musicNode != nil {
+			musicNode?.radius = 50
+			musicNode?.width = 5.0
+			musicNode?.color = UIColor.white
+			musicNode?.backgroundColor = UIColor.darkGray
 		}
 
-		appearAnimation()
-
+		appearAnimation {
+			self.musicNode?.countdown(time: 10.0) {
+				print("complete")
+			}
+		}
 	}
 
 	override func handleClick(_ nodes: [SKNode]) {
@@ -391,15 +395,7 @@ class QuestionScene: MasterScene {
 			label.run(SKAction.fadeIn(withDuration: 1.0))
 		}
 
-		if let label = self.status {
-			label.alpha = 0.0
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.2),
-				SKAction.fadeIn(withDuration: 1.0)
-			]))
-		}
-
-		if let label = self.difficultyNode {
+		if let label = self.musicNode {
 			label.alpha = 0.0
 			label.run(SKAction.sequence([
 				SKAction.wait(forDuration: 0.2),
@@ -414,7 +410,7 @@ class QuestionScene: MasterScene {
 		if let label = self.confirm {
 			label.alpha = 0.0
 			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.6),
+				SKAction.wait(forDuration: 0.4),
 				SKAction.fadeIn(withDuration: 1.0)
 			]))
 		}
@@ -422,7 +418,7 @@ class QuestionScene: MasterScene {
 		if let label = self.pauseNode {
 			label.alpha = 0.0
 			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.8),
+				SKAction.wait(forDuration: 0.6),
 				SKAction.fadeIn(withDuration: 1.0)
 			]), completion: completion)
 		}
@@ -439,14 +435,7 @@ class QuestionScene: MasterScene {
 			label.run(SKAction.fadeOut(withDuration: 1.0))
 		}
 
-		if let label = self.status {
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.2),
-				SKAction.fadeOut(withDuration: 1.0)
-			]))
-		}
-
-		if let label = self.difficultyNode {
+		if let label = self.musicNode {
 			label.run(SKAction.sequence([
 				SKAction.wait(forDuration: 0.2),
 				SKAction.fadeOut(withDuration: 1.0)
@@ -459,14 +448,14 @@ class QuestionScene: MasterScene {
 
 		if let label = self.confirm {
 			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.6),
+				SKAction.wait(forDuration: 0.4),
 				SKAction.fadeOut(withDuration: 1.0)
 			]))
 		}
 
 		if let label = self.pauseNode {
 			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.8),
+				SKAction.wait(forDuration: 0.6),
 				SKAction.fadeOut(withDuration: 1.0)
 			]), completion: completion)
 		}
