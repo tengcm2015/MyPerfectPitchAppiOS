@@ -206,16 +206,10 @@ class QuestionScene: MasterScene {
 			pauseMenu?.hide()
 		}
 
-		if musicNode != nil {
-			musicNode?.radius = 50
-			musicNode?.width = 5.0
-			musicNode?.color = UIColor.white
-			musicNode?.backgroundColor = UIColor.darkGray
-		}
-
 		appearAnimation {
 			self.musicNode?.countdown(time: 10.0) {
-				print("complete")
+				self.musicNode?.setMusic("cs")
+				self.musicNode?.play()
 			}
 		}
 	}
