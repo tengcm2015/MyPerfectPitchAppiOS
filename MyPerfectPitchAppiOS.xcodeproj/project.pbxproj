@@ -27,6 +27,7 @@
 		9C622C141F373A70007DFD49 /* piano_fs.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C622C081F373A70007DFD49 /* piano_fs.wav */; };
 		9C622C151F373A70007DFD49 /* piano_g.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C622C091F373A70007DFD49 /* piano_g.wav */; };
 		9C622C161F373A70007DFD49 /* piano_gs.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C622C0A1F373A70007DFD49 /* piano_gs.wav */; };
+		9C622C181F373F3E007DFD49 /* KeyboardNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C622C171F373F3E007DFD49 /* KeyboardNode.swift */; };
 		9C7E344A1F2C184B00DD723E /* MusicNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7E34491F2C184B00DD723E /* MusicNode.swift */; };
 		9CA2F1EC1F19AF6500F376D0 /* MasterScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA2F1EB1F19AF6500F376D0 /* MasterScene.swift */; };
 		9CB1C3D61F10663700F3C01A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1C3D51F10663700F3C01A /* AppDelegate.swift */; };
@@ -60,6 +61,7 @@
 		9C622C081F373A70007DFD49 /* piano_fs.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = piano_fs.wav; sourceTree = "<group>"; };
 		9C622C091F373A70007DFD49 /* piano_g.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = piano_g.wav; sourceTree = "<group>"; };
 		9C622C0A1F373A70007DFD49 /* piano_gs.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = piano_gs.wav; sourceTree = "<group>"; };
+		9C622C171F373F3E007DFD49 /* KeyboardNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardNode.swift; sourceTree = "<group>"; };
 		9C7E34491F2C184B00DD723E /* MusicNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicNode.swift; sourceTree = "<group>"; };
 		9CA2F1EB1F19AF6500F376D0 /* MasterScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MasterScene.swift; path = Scenes/MasterScene.swift; sourceTree = "<group>"; };
 		9CB1C3D21F10663700F3C01A /* MyPerfectPitchAppiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyPerfectPitchAppiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,6 +127,7 @@
 		9C7E34461F2BDCEA00DD723E /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				9C622C171F373F3E007DFD49 /* KeyboardNode.swift */,
 				9C7E34491F2C184B00DD723E /* MusicNode.swift */,
 			);
 			path = Library;
@@ -256,6 +259,7 @@
 			files = (
 				9C3E05021F11C94600339A92 /* StartMenuScene.swift in Sources */,
 				9CE650611F135D5300E2A81A /* SettingsScene.swift in Sources */,
+				9C622C181F373F3E007DFD49 /* KeyboardNode.swift in Sources */,
 				9CB1C3DE1F10663700F3C01A /* GameViewController.swift in Sources */,
 				9C3E04FE1F11C94600339A92 /* QuestionScene.swift in Sources */,
 				9C3E04FC1F11C94600339A92 /* DifficultyMenuScene.swift in Sources */,

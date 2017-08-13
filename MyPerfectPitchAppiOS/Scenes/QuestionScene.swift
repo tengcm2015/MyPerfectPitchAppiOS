@@ -1,102 +1,6 @@
 import SpriteKit
 import GameplayKit
 
-class Keyboard {
-
-	//MARK: Properties
-
-	private var node : SKNode
-	private var C    : SKNode?
-	private var D    : SKNode?
-	private var E    : SKNode?
-	private var F    : SKNode?
-	private var G    : SKNode?
-	private var A    : SKNode?
-	private var B    : SKNode?
-	private var Cs   : SKNode?
-	private var Ds   : SKNode?
-	private var Fs   : SKNode?
-	private var Gs   : SKNode?
-	private var As   : SKNode?
-
-	init (_ node: SKNode) {
-		self.node = node
-		self.C    = node.childNode(withName: "//C")
-		self.D    = node.childNode(withName: "//D")
-		self.E    = node.childNode(withName: "//E")
-		self.F    = node.childNode(withName: "//F")
-		self.G    = node.childNode(withName: "//G")
-		self.A    = node.childNode(withName: "//A")
-		self.B    = node.childNode(withName: "//B")
-		self.Cs   = node.childNode(withName: "//C#")
-		self.Ds   = node.childNode(withName: "//D#")
-		self.Fs   = node.childNode(withName: "//F#")
-		self.Gs   = node.childNode(withName: "//G#")
-		self.As   = node.childNode(withName: "//A#")
-	}
-
-	func hide () {
-		node.isHidden = true
-	}
-
-	func show () {
-		node.isHidden = false
-	}
-
-	func appearAnimation () {
-		appearAnimation {
-			print("keyboard appeared")
-		}
-	}
-
-	func appearAnimation(_ completion: @escaping () -> Void) {
-		let sortedChildren = node.children.sorted(by: {$0.position.y > $1.position.y})
-		for (i, child) in sortedChildren.enumerated() {
-			child.alpha = 0.0
-			if i == sortedChildren.count - 1 {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
-				]), completion: completion)
-
-			} else {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
-				]))
-			}
-		}
-	}
-
-	func dismissAnimation () {
-		dismissAnimation {
-			print("keyboard dismissed")
-		}
-	}
-
-	func dismissAnimation(_ completion: @escaping () -> Void) {
-		let sortedChildren = node.children.sorted(by: {$0.position.y > $1.position.y})
-		for (i, child) in sortedChildren.enumerated() {
-			if i == sortedChildren.count - 1 {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeOut(withDuration: 1.0)
-				]), completion: completion)
-
-			} else {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeOut(withDuration: 1.0)
-				]))
-			}
-		}
-	}
-
-	func clicked(_ nodes: [SKNode]) -> SKNode? {
-		return nodes.last
-	}
-}
-
 class PauseMenu {
 
 	//MARK: Properties
@@ -188,7 +92,7 @@ class QuestionScene: MasterScene {
 	private var musicNode      : MusicNode?
 	private var confirm        : SKLabelNode?
 	private var pauseNode      : SKLabelNode?
-	private var keyboard       : Keyboard?
+	private var keyboard       : KeyboardNode?
 	private var pauseMenu      : PauseMenu?
 
 	override func didMove(to view: SKView) {
@@ -199,7 +103,7 @@ class QuestionScene: MasterScene {
 		self.musicNode      = self.childNode(withName: "//musicNode" ) as? MusicNode
 		self.confirm        = self.childNode(withName: "//confirm"   ) as? SKLabelNode
 		self.pauseNode      = self.childNode(withName: "//pause"     ) as? SKLabelNode
-		self.keyboard       = Keyboard (self.childNode(withName: "//keyboard")!)
+		self.keyboard       = self.childNode(withName: "//keyboard"  ) as? KeyboardNode
 		self.pauseMenu      = PauseMenu(self.childNode(withName: "//pauseMenu")!)
 
 		if pauseMenu != nil {
