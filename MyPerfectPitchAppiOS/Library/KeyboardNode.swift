@@ -1,86 +1,109 @@
 import SpriteKit
 
 class KeyboardKeyNode: SKNode {
-	
+
 	//  MARK: constants
-	
+
 	struct Constants {
-		static let sideLength : CGFloat = 50
+		static let size : CGFloat = 50
+		static let color = SKColor.white
+		static let backgroundColor = SKColor(
+			red: 38/255, green: 38/255, blue: 38/255, alpha: 1.0
+		)
 	}
-	
-	
+
+
 	//  MARK: properties
-	
+
 	private let label = SKLabelNode()
-	
+
 	private let shape = SKShapeNode()
-	
-	public var sideLength: CGFloat = KeyboardKeyNode.Constants.sideLength {
+
+	public private(set) var selected : Bool = false {
 		didSet {
-			setSideLength()
+			if self.selected {
+				self.label.fontColor = KeyboardKeyNode.Constants.backgroundColor
+				self.shape.fillColor = KeyboardKeyNode.Constants.color
+			} else {
+				self.label.fontColor = KeyboardKeyNode.Constants.color
+				self.shape.fillColor = SKColor.clear
+			}
 		}
 	}
-	
+
+	public var size: CGFloat = KeyboardKeyNode.Constants.size {
+		didSet {
+			self.label.fontSize = self.size / 2
+
+			let path = UIBezierPath()
+			let coordinate = self.size / 2
+			path.move   (to: CGPoint(x: coordinate,  y: coordinate ))
+			path.addLine(to: CGPoint(x: coordinate,  y: -coordinate))
+			path.addLine(to: CGPoint(x: -coordinate, y: -coordinate))
+			path.addLine(to: CGPoint(x: -coordinate, y: coordinate ))
+			path.addLine(to: CGPoint(x: coordinate,  y: coordinate ))
+
+			self.shape.path = path.cgPath
+		}
+	}
+
 	override public var name: String? {
 		didSet {
 			self.label.text = self.name
 		}
 	}
-	
+
 	//  MARK: init
-	
-	public init(sideLength: CGFloat = KeyboardKeyNode.Constants.sideLength) {
-		self.sideLength = sideLength
-		
+
+	public init(size: CGFloat = KeyboardKeyNode.Constants.size) {
 		super.init()
-		
+
 		self._init()
+
+		self.size = size
 	}
-	
+
 	override init() {
 		super.init()
-		
+
 		self._init()
+
+		self.size = KeyboardKeyNode.Constants.size
 	}
-	
+
 	required public init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
-		
+
 		self._init()
+
+		self.size = KeyboardKeyNode.Constants.size
 	}
-	
-	
+
+
 	//  MARK: helpers
-	
-	private func setSideLength() {
-		self.label.fontSize = self.sideLength / 2
-		
-		let path = UIBezierPath()
-		let coordinate = self.sideLength / 2
-		path.move(to: CGPoint(x: coordinate, y: coordinate))
-		path.addLine(to: CGPoint(x: coordinate, y: -coordinate))
-		path.addLine(to: CGPoint(x: -coordinate, y: -coordinate))
-		path.addLine(to: CGPoint(x: -coordinate, y: coordinate))
-		path.addLine(to: CGPoint(x: coordinate, y: coordinate))
-		
-		self.shape.path = path.cgPath
-	}
-	
+
 	private func _init() {
-		setSideLength()
 		self.shape.lineWidth = 3
-		
+
 		self.addChild(self.shape)
-		
+
 		self.label.position = CGPoint.zero
 		self.label.text = self.name
 		self.label.fontName = "Helvetica Neue Thin"
 		self.label.verticalAlignmentMode = .center
 		self.label.horizontalAlignmentMode = .center
-		
+
 		self.addChild(self.label)
+
+		self.selected = false
 	}
-	
+
+	// MARK: API
+
+	public func toggle() {
+		self.selected = !self.selected
+	}
+
 }
 
 class KeyboardNode: SKNode {
@@ -119,18 +142,19 @@ class KeyboardNode: SKNode {
 	//  MARK: helpers
 
 	private func getKeyNode(_ name: String) -> KeyboardKeyNode? {
-		if let node = self.childNode(withName: "//" + name) as? KeyboardKeyNode {
-			if let keySize = self.userData?.value(forKey: "keySize") as? Float {
-				print(keySize)
-				node.sideLength = CGFloat(keySize)
-			}
-			
-			return node
-		} else {
+		guard
+			let node = self.childNode(withName: "//" + name) as? KeyboardKeyNode
+		else {
 			return nil
 		}
+
+		if let keySize = self.userData?.value(forKey: "keySize") as? Float {
+			node.size = CGFloat(keySize)
+		}
+
+		return node
 	}
-	
+
 	private func _init() {
 		self.C    = getKeyNode("C")
 		self.D    = getKeyNode("D")
@@ -164,7 +188,8 @@ class KeyboardNode: SKNode {
 	}
 
 	public func appearAnimation(_ completion: @escaping () -> Void) {
-		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
+		let sortedChildren = self.children
+		                         .sorted(by: {$0.position.y > $1.position.y})
 		for (i, child) in sortedChildren.enumerated() {
 			child.alpha = 0.0
 			if i == sortedChildren.count - 1 {
@@ -189,7 +214,8 @@ class KeyboardNode: SKNode {
 	}
 
 	public func dismissAnimation(_ completion: @escaping () -> Void) {
-		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
+		let sortedChildren = self.children
+		                         .sorted(by: {$0.position.y > $1.position.y})
 		for (i, child) in sortedChildren.enumerated() {
 			if i == sortedChildren.count - 1 {
 				child.run(SKAction.sequence([
@@ -208,5 +234,15 @@ class KeyboardNode: SKNode {
 
 	public func clicked(_ nodes: [SKNode]) -> SKNode? {
 		return nodes.last
+	}
+
+	public func selected() -> [SKNode] {
+		return self.children.filter {
+			guard let keyNode = $0 as? KeyboardKeyNode else {
+				return false
+			}
+
+			return keyNode.selected
+		}
 	}
 }
