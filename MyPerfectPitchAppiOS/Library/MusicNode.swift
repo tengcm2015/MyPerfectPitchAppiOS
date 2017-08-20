@@ -15,7 +15,8 @@ public class MusicNode : SKNode {
 	//  MARK: constants
 
 	struct Constants {
-		static let sideLength : CGFloat = 50
+		static let size : CGFloat  = 50
+		static let color : SKColor = SKColor.white
 	}
 
 
@@ -23,22 +24,36 @@ public class MusicNode : SKNode {
 
 	private let countdownNode = CountdownNode()
 
-	private var pitch : String?
+	private let label = SKLabelNode()
 
-	public var sideLength: CGFloat = MusicNode.Constants.sideLength {
+	private let shape = SKShapeNode()
+
+	public enum MusicNodeState {
+		case waiting, correct, error
+	}
+
+	public private(set) var state : MusicNodeState = .waiting
+
+	public var pitch : MusicNodePitch = .c
+
+	public private(set) var countingDown : Bool = false
+
+	public var size: CGFloat = MusicNode.Constants.size {
 		didSet {
-			self.countdownNode.radius = self.sideLength
-			self.countdownNode.width  = self.sideLength / 10
+			self.label.fontSize	      = self.size / 2
+			self.shape.lineWidth      = self.size / 20
+			self.countdownNode.radius = self.size / 2
+			self.countdownNode.width  = self.size / 20
 		}
 	}
 
 
 	//  MARK: init
 
-	public init(sideLength: CGFloat = MusicNode.Constants.sideLength) {
-		self.sideLength = sideLength
-
+	public init(size: CGFloat = MusicNode.Constants.size) {
 		super.init()
+
+		self.userData?.setValue(size, forKey: "size")
 
 		self._init()
 	}
@@ -59,43 +74,127 @@ public class MusicNode : SKNode {
 	//  MARK: helpers
 
 	private func _init() {
-		self.countdownNode.radius = self.sideLength
-		self.countdownNode.width  = self.sideLength / 10
+		if let customSize = self.userData?.value(forKey: "size") as? Float {
+			self.size = CGFloat(customSize)
+		} else {
+			self.size = MusicNode.Constants.size
+		}
+
+		self.label.position = CGPoint.zero
+		self.label.fontName = "Helvetica Neue Thin"
+		self.label.verticalAlignmentMode = .center
+		self.label.horizontalAlignmentMode = .center
+
+		self.addChild(self.label)
+
+		self.shape.position = CGPoint.zero
+
+		self.addChild(self.shape)
+
 		self.countdownNode.color  = UIColor.white
 		self.countdownNode.backgroundColor = UIColor.darkGray
 
 		self.addChild(self.countdownNode)
+
+		awaitAnswer()
 	}
 
 
 	//  MARK: API
 
-	public func countdown(time: TimeInterval = 1.0, completionHandler: ((Void) -> Void)?) {
-		self.countdownNode.countdown(time: time, completionHandler: completionHandler)
+	public func countdown(time: TimeInterval = 1.0,
+	                      completionHandler: ((Void) -> Void)?) {
+		self.countingDown = true
+		self.countdownNode.countdown(time: time,
+		                             completionHandler: completionHandler)
 	}
 
-	public func countdown(time: TimeInterval = 1.0, progressHandler: ((Void) -> Void)?, completionHandler: ((Void) -> Void)?) {
-		self.countdownNode.countdown(time: time, progressHandler: progressHandler, completionHandler: completionHandler)
+	public func countdown(time: TimeInterval = 1.0,
+	                      progressHandler: ((Void) -> Void)?,
+	                      completionHandler: ((Void) -> Void)?) {
+		self.countingDown = true
+		self.countdownNode.countdown(time: time,
+		                             progressHandler: progressHandler,
+		                             completionHandler: completionHandler)
 	}
 
 	public func stopCountdown() {
+		self.countingDown = false
 		self.countdownNode.stopCountdown()
 	}
 
-	public func setMusic(_ name: String) {
-		self.pitch = name
-	}
-
-	public func getPitch() -> String? {
-		return self.pitch
-	}
-
 	public func play() {
-		if let pitch = self.pitch {
-			self.run(SKAction.playSoundFileNamed("piano_" + pitch + ".wav", waitForCompletion: false))
+		var fileName: String
+		switch self.pitch {
+		case .a:
+			fileName = "piano_a.wav"
+		case .b:
+			fileName = "piano_b.wav"
+		case .c:
+			fileName = "piano_c.wav"
+		case .d:
+			fileName = "piano_d.wav"
+		case .e:
+			fileName = "piano_e.wav"
+		case .f:
+			fileName = "piano_f.wav"
+		case .g:
+			fileName = "piano_g.wav"
+		case .asharp:
+			fileName = "piano_as.wav"
+		case .csharp:
+			fileName = "piano_cs.wav"
+		case .dsharp:
+			fileName = "piano_ds.wav"
+		case .fsharp:
+			fileName = "piano_fs.wav"
+		case .gsharp:
+			fileName = "piano_gs.wav"
 		}
+
+		self.run(SKAction.playSoundFileNamed(
+			fileName, waitForCompletion: false
+		))
 	}
 
+	public func awaitAnswer() {
+		self.state = .waiting
+
+		self.label.text = "?"
+		self.label.isHidden = false
+		self.shape.isHidden = true
+	}
+
+	public func correct() {
+		self.state = .correct
+
+		self.label.isHidden = true
+		self.shape.isHidden = false
+
+		let shapeSize = self.size / 2 / 1.41421356
+		let path = UIBezierPath()
+		path.move   (to: CGPoint(x: -shapeSize, y: -shapeSize / 3))
+		path.addLine(to: CGPoint(x: -shapeSize / 3, y: -shapeSize))
+		path.addLine(to: CGPoint(x: shapeSize, y: shapeSize))
+
+		self.shape.path = path.cgPath
+	}
+
+	public func error() {
+		self.state = .error
+
+		self.label.isHidden = true
+		self.shape.isHidden = false
+
+		let shapeSize = self.size / 2 / 1.41421356
+		let path = UIBezierPath()
+		path.move   (to: CGPoint(x: shapeSize, y: shapeSize))
+		path.addLine(to: CGPoint(x: -shapeSize, y: -shapeSize))
+		path.move   (to: CGPoint(x: shapeSize, y: -shapeSize))
+		path.addLine(to: CGPoint(x: -shapeSize, y: shapeSize))
+
+		self.shape.path = path.cgPath
+	}
 }
 
 public class CountdownNode : SKShapeNode {
@@ -104,8 +203,8 @@ public class CountdownNode : SKShapeNode {
 
 	struct Constants {
 		static let radius : CGFloat          = 32
-		static let color : SKColor           = SKColor.darkGray
-		static let backgroundColor : SKColor = SKColor.lightGray
+		static let color : SKColor           = SKColor.white
+		static let backgroundColor : SKColor = SKColor.darkGray
 		static let width : CGFloat           = 2.0
 		static let progress : CGFloat        = 0.0
 		static let startAngle : CGFloat      = CGFloat(Double.pi)
@@ -230,14 +329,21 @@ public class CountdownNode : SKShapeNode {
 	 and it calls a callback on the main thread if its finished
 
 	 :param: time     The time interval to count
-	 :param: progressHandler   An optional callback method (always called on main thread)
+	 :param: progressHandler
+	                  An optional callback method (always called on main thread)
 	 :param: callback An optional callback method (always called on main thread)
 	 */
-	public func countdown(time: TimeInterval = 1.0, completionHandler: ((Void) -> Void)?) {
-		self.countdown(time: time, progressHandler: nil, completionHandler: completionHandler)
+	public func countdown(time: TimeInterval = 1.0,
+	                      completionHandler: ((Void) -> Void)?) {
+		self.countdown (
+			time: time, progressHandler: nil,
+			completionHandler: completionHandler
+		)
 	}
 
-	public func countdown(time: TimeInterval = 1.0, progressHandler: ((Void) -> Void)?, completionHandler: ((Void) -> Void)?) {
+	public func countdown(time: TimeInterval = 1.0,
+	                      progressHandler: ((Void) -> Void)?,
+	                      completionHandler: ((Void) -> Void)?) {
 		self.stopCountdown()
 
 		self.run(SKAction.customAction(withDuration: time) {
@@ -258,10 +364,15 @@ public class CountdownNode : SKShapeNode {
 					})
 				}
 			}
+
 		}, withKey: CountdownNode.Constants.actionKey)
 	}
 
 	public func stopCountdown() {
 		self.removeAction(forKey: CountdownNode.Constants.actionKey)
+	}
+
+	public func reset() {
+		self.updateProgress(node: self.timeNode)
 	}
 }

@@ -7,7 +7,7 @@ class ResultScene: MasterScene {
 
 	var score : Int?
 	var message : String?
-	var difficulty : String?
+	var difficulty : GameDifficulties?
 
 	private var title          : SKLabelNode?
 	private var difficultyNode : SKLabelNode?
@@ -34,7 +34,7 @@ class ResultScene: MasterScene {
 			self.messageNode?.text = message
 		}
 		if let difficulty = self.difficulty {
-			self.difficultyNode?.text = difficulty
+			self.difficultyNode?.text = difficulty.rawValue
 		}
 
 		appearAnimation()
@@ -73,7 +73,7 @@ class ResultScene: MasterScene {
 		}
 	}
 
-	private func goToQuestionScene(_ difficulty : String) {
+	private func goToQuestionScene(_ difficulty : GameDifficulties) {
 		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
 			scene.score = 0
 			scene.difficulty = difficulty

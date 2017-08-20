@@ -81,15 +81,136 @@ class PauseMenu {
 	}
 }
 
+class MusicNodes: SKNode {
+
+	public var difficulty: GameDifficulties = .easy {
+		didSet {
+			var musicNodeXPos = [CGFloat]()
+
+			switch self.difficulty {
+			case .easy:
+				musicNodeXPos = [0]
+
+			case .normal:
+				musicNodeXPos = [-60, 60]
+
+			case .hard:
+				musicNodeXPos = [-110, 0, 110]
+
+			case .lunatic:
+				musicNodeXPos = [-220, -110, 0, 110, 220]
+			}
+
+			self.removeAllChildren()
+			for xPos in musicNodeXPos {
+				let node = MusicNode()
+				if let customSize = self.userData?.value(forKey: "size") as? Float {
+					node.size = CGFloat(customSize)
+				}
+				node.position.x = xPos
+				self.addChild(node)
+			}
+		}
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+	}
+
+	public func play() {
+		for case let musicNode as MusicNode in self.children {
+			musicNode.play()
+		}
+	}
+
+	public func setPitch() {
+		let shuffled = GKShuffledDistribution(lowestValue: 0,
+		                                      highestValue: 11)
+		for case let musicNode as MusicNode in self.children {
+			switch shuffled.nextInt() {
+			case 0:
+				musicNode.pitch = .a
+
+			case 1:
+				musicNode.pitch = .b
+
+			case 2:
+				musicNode.pitch = .c
+
+			case 3:
+				musicNode.pitch = .d
+
+			case 4:
+				musicNode.pitch = .e
+
+			case 5:
+				musicNode.pitch = .f
+
+			case 6:
+				musicNode.pitch = .g
+
+			case 7:
+				musicNode.pitch = .asharp
+
+			case 8:
+				musicNode.pitch = .csharp
+
+			case 9:
+				musicNode.pitch = .dsharp
+
+			case 10:
+				musicNode.pitch = .fsharp
+
+			case 11:
+				musicNode.pitch = .gsharp
+
+			default:
+				print("nextQuestion(): switch error")
+				return
+			}
+			print(musicNode.pitch)
+			musicNode.awaitAnswer()
+		}
+	}
+
+	public func checkAnswer(_ selectedPitch: [MusicNodePitch]) -> Int {
+		var point = 0
+
+		if selectedPitch.count > self.children.count {
+			for case let musicNode as MusicNode in self.children {
+				musicNode.error()
+			}
+
+		} else {
+			for case let musicNode as MusicNode in self.children {
+				if selectedPitch.contains(musicNode.pitch) {
+					point += 1
+					musicNode.correct()
+				} else {
+					musicNode.error()
+				}
+			}
+
+			if point > 0 {
+				point = 1
+			}
+		}
+
+		return point
+	}
+
+}
+
 class QuestionScene: MasterScene {
 
 	//MARK: Properties
 
 	var score : Int = 0
-	var difficulty : String?
+	var questionNum : Int = 1
+	var difficulty : GameDifficulties?
 
 	private var title          : SKLabelNode?
-	private var musicNode      : MusicNode?
+	private var musicNodes     : MusicNodes?
 	private var confirm        : SKLabelNode?
 	private var pauseNode      : SKLabelNode?
 	private var keyboard       : KeyboardNode?
@@ -100,75 +221,146 @@ class QuestionScene: MasterScene {
 
 		// Get label nodes from scene and store it for use later
 		self.title          = self.childNode(withName: "//title"     ) as? SKLabelNode
-		self.musicNode      = self.childNode(withName: "//musicNode" ) as? MusicNode
+		self.musicNodes     = self.childNode(withName: "//musicNodes" ) as?
+			MusicNodes
 		self.confirm        = self.childNode(withName: "//confirm"   ) as? SKLabelNode
 		self.pauseNode      = self.childNode(withName: "//pause"     ) as? SKLabelNode
 		self.keyboard       = self.childNode(withName: "//keyboard"  ) as? KeyboardNode
 		self.pauseMenu      = PauseMenu(self.childNode(withName: "//pauseMenu")!)
 
-		if pauseMenu != nil {
-			pauseMenu?.hide()
+		if self.pauseMenu != nil {
+			self.pauseMenu?.hide()
 		}
 
-		appearAnimation {
-			self.musicNode?.countdown(time: 10.0) {
-				self.musicNode?.setMusic("cs")
-				self.musicNode?.play()
-			}
+		self.title?.text = "Question " + String(self.questionNum)
+		self.musicNodes?.difficulty = self.difficulty!
+
+		self.appearAnimation {
+			self.nextQuestion()
 		}
 	}
 
 	override func handleClick(_ nodes: [SKNode]) {
-		let node = nodes.last
-		if let name = node?.name {
+		if let node = nodes.last {
+			guard let name = node.name else {
+				return
+			}
+
 			switch name {
 			case "keyboard":
-				var tmp = nodes
-				tmp.removeLast()
-				let clicked = keyboard?.clicked(tmp)
-				if let clickName = clicked?.name {
-					print(clickName)
+				guard let keyboard = self.keyboard else {
+					return
 				}
-				break
-			case "pauseMenu":
+
 				var tmp = nodes
 				tmp.removeLast()
-				let clicked = pauseMenu?.clicked(tmp)
-				if let clickName = clicked?.name {
+				if let clicked = keyboard.clicked(tmp){
+					print(clicked.name ?? "x")
+					clicked.toggle()
+				}
+				if let selected = self.keyboard?.selected() {
+					print(selected)
+				}
+
+			case "musicNodes":
+				var tmp = nodes
+				tmp.removeLast()
+				if let musicNode = tmp.last as? MusicNode {
+					print(musicNode.pitch)
+				}
+
+			case "pauseMenu":
+				guard let pauseMenu = self.pauseMenu else {
+					return
+				}
+
+				var tmp = nodes
+				tmp.removeLast()
+				if let clickName = pauseMenu.clicked(tmp)?.name {
 					switch clickName {
 					case "retry":
-						retry()
-						break
+						self.retry()
+
 					case "difficulty":
-						goToDifficultyScene()
-						break
+						self.goToDifficultyScene()
+
 					case "mainMenu":
-						goToStartMenuScene()
-						break
+						self.goToStartMenuScene()
+
 					case "resume":
-						resume()
-						break
+						self.resume()
+
 					default:
 						print(clickName)
-						break
+
 					}
 				}
-				break
+
 			case "confirm":
-				score += 1
-				goToResultScene("Well Done!")
-				break
+				guard let musicNodes = self.musicNodes,
+				      let keyboard = self.keyboard,
+				      let confirmNode = self.confirm
+				else {
+					return
+				}
+
+				if confirmNode.text == "continue" {
+					self.questionNum += 1
+					if self.questionNum > 20 {
+						switch self.score {
+						case 0:
+							self.goToResultScene(":(")
+						case 1..<10:
+							self.goToResultScene("Keep it on!")
+						case 10..<15:
+							self.goToResultScene("Well Done!")
+						case 15..<19:
+							self.goToResultScene("So close!")
+						case 20:
+							self.goToResultScene("Fantastic!")
+						default:
+							self.goToResultScene("WTF!?")
+						}
+					} else {
+						confirmNode.text = "confirm"
+						self.nextQuestion()
+					}
+
+				} else {
+					var selectedPitches = [MusicNodePitch]()
+					let selected = keyboard.selected()
+					for node in selected {
+						selectedPitches.append(node.pitch)
+					}
+
+					self.score += musicNodes.checkAnswer(selectedPitches)
+					confirmNode.text = "continue"
+				}
+
 			case "pause":
-				pause()
-				break
+				self.pause()
+
 			default:
 				print(name)
-				break
 			}
 		}
 	}
 
 	//MARK: Private Methods
+
+	private func nextQuestion() {
+		guard let musicNodes = self.musicNodes,
+		      let keyboard = self.keyboard
+		else {
+			return
+		}
+
+		keyboard.reset()
+		musicNodes.setPitch()
+		musicNodes.play()
+
+		self.title?.text = "Question " + String(self.questionNum)
+	}
 
 	private func pause() {
 		keyboard?.dismissAnimation {
@@ -293,7 +485,7 @@ class QuestionScene: MasterScene {
 			label.run(SKAction.fadeIn(withDuration: 1.0))
 		}
 
-		if let label = self.musicNode {
+		if let label = self.musicNodes {
 			label.alpha = 0.0
 			label.run(SKAction.sequence([
 				SKAction.wait(forDuration: 0.2),
@@ -333,7 +525,7 @@ class QuestionScene: MasterScene {
 			label.run(SKAction.fadeOut(withDuration: 1.0))
 		}
 
-		if let label = self.musicNode {
+		if let label = self.musicNodes {
 			label.run(SKAction.sequence([
 				SKAction.wait(forDuration: 0.2),
 				SKAction.fadeOut(withDuration: 1.0)

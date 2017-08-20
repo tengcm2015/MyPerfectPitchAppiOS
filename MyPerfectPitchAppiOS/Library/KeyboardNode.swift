@@ -47,20 +47,47 @@ class KeyboardKeyNode: SKNode {
 		}
 	}
 
-	override public var name: String? {
+	public var pitch: MusicNodePitch = .c {
 		didSet {
-			self.label.text = self.name
+			switch self.pitch {
+			case .a:
+				self.label.text = "A"
+			case .b:
+				self.label.text = "B"
+			case .c:
+				self.label.text = "C"
+			case .d:
+				self.label.text = "D"
+			case .e:
+				self.label.text = "E"
+			case .f:
+				self.label.text = "F"
+			case .g:
+				self.label.text = "G"
+			case .asharp:
+				self.label.text = "A#"
+			case .csharp:
+				self.label.text = "C#"
+			case .dsharp:
+				self.label.text = "D#"
+			case .fsharp:
+				self.label.text = "F#"
+			case .gsharp:
+				self.label.text = "G#"
+			}
 		}
 	}
 
 	//  MARK: init
 
-	public init(size: CGFloat = KeyboardKeyNode.Constants.size) {
+	public init(size: CGFloat = KeyboardKeyNode.Constants.size,
+	            pitch: MusicNodePitch = .c) {
 		super.init()
 
 		self._init()
 
 		self.size = size
+		self.pitch = pitch
 	}
 
 	override init() {
@@ -141,12 +168,14 @@ class KeyboardNode: SKNode {
 
 	//  MARK: helpers
 
-	private func getKeyNode(_ name: String) -> KeyboardKeyNode? {
+	private func getKeyNode(_ pitch: MusicNodePitch) -> KeyboardKeyNode? {
 		guard
-			let node = self.childNode(withName: "//" + name) as? KeyboardKeyNode
+			let node = self.childNode(withName: "//" + pitch.rawValue) as? KeyboardKeyNode
 		else {
 			return nil
 		}
+
+		node.pitch = pitch
 
 		if let keySize = self.userData?.value(forKey: "keySize") as? Float {
 			node.size = CGFloat(keySize)
@@ -156,18 +185,18 @@ class KeyboardNode: SKNode {
 	}
 
 	private func _init() {
-		self.C    = getKeyNode("C")
-		self.D    = getKeyNode("D")
-		self.E    = getKeyNode("E")
-		self.F    = getKeyNode("F")
-		self.G    = getKeyNode("G")
-		self.A    = getKeyNode("A")
-		self.B    = getKeyNode("B")
-		self.Cs   = getKeyNode("C#")
-		self.Ds   = getKeyNode("D#")
-		self.Fs   = getKeyNode("F#")
-		self.Gs   = getKeyNode("G#")
-		self.As   = getKeyNode("A#")
+		self.C    = getKeyNode(.c)
+		self.D    = getKeyNode(.d)
+		self.E    = getKeyNode(.e)
+		self.F    = getKeyNode(.f)
+		self.G    = getKeyNode(.g)
+		self.A    = getKeyNode(.a)
+		self.B    = getKeyNode(.b)
+		self.Cs   = getKeyNode(.csharp)
+		self.Ds   = getKeyNode(.dsharp)
+		self.Fs   = getKeyNode(.fsharp)
+		self.Gs   = getKeyNode(.gsharp)
+		self.As   = getKeyNode(.asharp)
 	}
 
 
@@ -232,17 +261,22 @@ class KeyboardNode: SKNode {
 		}
 	}
 
-	public func clicked(_ nodes: [SKNode]) -> SKNode? {
-		return nodes.last
+	public func clicked(_ nodes: [SKNode]) -> KeyboardKeyNode? {
+		return nodes.last as? KeyboardKeyNode
 	}
 
-	public func selected() -> [SKNode] {
+	public func selected() -> [KeyboardKeyNode] {
 		return self.children.filter {
 			guard let keyNode = $0 as? KeyboardKeyNode else {
 				return false
 			}
-
 			return keyNode.selected
+		} as! [KeyboardKeyNode]
+	}
+
+	public func reset() {
+		for node in self.selected() {
+			node.toggle()
 		}
 	}
 }

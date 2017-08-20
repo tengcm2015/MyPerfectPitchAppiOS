@@ -30,6 +30,39 @@ class MasterScene: SKScene {
 		}
 	}
 
+	public private(set) var frontColor = UIColor.white
+	public private(set) var middleColor = UIColor.darkGray
+	override public internal(set) var backgroundColor : UIColor {
+		get {
+			return super.backgroundColor
+		}
+		set(newColor) {
+			super.backgroundColor = newColor
+		}
+	}
+
+	public enum ColorSchemes {
+		case dark, light, green, blue, red, purple
+	}
+
+	public var colorScheme : ColorSchemes = .dark {
+		didSet {
+			switch self.colorScheme {
+			case .dark:
+				break
+			case .light:
+				break
+			case .green:
+				break
+			case .blue:
+				break
+			case .red:
+				break
+			case .purple:
+				break
+			}
+		}
+	}
 
 	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		for t in touches { self.touchDown(atPoint: t.location(in: self)) }

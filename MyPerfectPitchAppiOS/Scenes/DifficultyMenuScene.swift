@@ -42,16 +42,16 @@ class DifficultyMenuScene: MasterScene {
 		if let name = node?.name {
 			switch name {
 			case "easy":
-				goToQuestionScene("Easy")
+				goToQuestionScene(.easy)
 				break
 			case "normal":
-				goToQuestionScene("Normal")
+				goToQuestionScene(.normal)
 				break
 			case "hard":
-				goToQuestionScene("Hard")
+				goToQuestionScene(.hard)
 				break
 			case "lunatic":
-				goToQuestionScene("Lunatic")
+				goToQuestionScene(.lunatic)
 				break
 			case "return":
 				goToStartMenuScene()
@@ -76,7 +76,7 @@ class DifficultyMenuScene: MasterScene {
 		}
 	}
 
-	private func goToQuestionScene(_ difficulty : String) {
+	private func goToQuestionScene(_ difficulty : GameDifficulties) {
 		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
 			scene.score = 0
 			scene.difficulty = difficulty
