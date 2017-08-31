@@ -38,7 +38,7 @@
 		9CB1C3E61F10663700F3C01A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CB1C3E41F10663700F3C01A /* LaunchScreen.storyboard */; };
 		9CE650601F135D5300E2A81A /* SettingsScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9CE6505E1F135D5300E2A81A /* SettingsScene.sks */; };
 		9CE650611F135D5300E2A81A /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE6505F1F135D5300E2A81A /* SettingsScene.swift */; };
-		9CFAC6F11F49DA94003EF27E /* Enumerations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFAC6F01F49DA94003EF27E /* Enumerations.swift */; };
+		9CFAC6F11F49DA94003EF27E /* Definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFAC6F01F49DA94003EF27E /* Definitions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,7 +75,7 @@
 		9CB1C3E71F10663700F3C01A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9CE6505E1F135D5300E2A81A /* SettingsScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = SettingsScene.sks; path = Scenes/SettingsScene.sks; sourceTree = "<group>"; };
 		9CE6505F1F135D5300E2A81A /* SettingsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsScene.swift; path = Scenes/SettingsScene.swift; sourceTree = "<group>"; };
-		9CFAC6F01F49DA94003EF27E /* Enumerations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enumerations.swift; sourceTree = "<group>"; };
+		9CFAC6F01F49DA94003EF27E /* Definitions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Definitions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +131,7 @@
 			children = (
 				9C622C171F373F3E007DFD49 /* KeyboardNode.swift */,
 				9C7E34491F2C184B00DD723E /* MusicNode.swift */,
-				9CFAC6F01F49DA94003EF27E /* Enumerations.swift */,
+				9CFAC6F01F49DA94003EF27E /* Definitions.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -270,7 +270,7 @@
 				9C7E344A1F2C184B00DD723E /* MusicNode.swift in Sources */,
 				9CA2F1EC1F19AF6500F376D0 /* MasterScene.swift in Sources */,
 				9CB1C3D61F10663700F3C01A /* AppDelegate.swift in Sources */,
-				9CFAC6F11F49DA94003EF27E /* Enumerations.swift in Sources */,
+				9CFAC6F11F49DA94003EF27E /* Definitions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

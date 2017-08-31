@@ -6,10 +6,6 @@ class KeyboardKeyNode: SKNode {
 
 	struct Constants {
 		static let size : CGFloat = 50
-		static let color = SKColor.white
-		static let backgroundColor = SKColor(
-			red: 38/255, green: 38/255, blue: 38/255, alpha: 1.0
-		)
 	}
 
 
@@ -19,14 +15,29 @@ class KeyboardKeyNode: SKNode {
 
 	private let shape = SKShapeNode()
 
+	public var color = DefaultConstants.color {
+		didSet {
+			self.shape.strokeColor = self.color
+			let sel = self.selected
+			self.selected = sel
+		}
+	}
+
+	public var backgroundColor = DefaultConstants.backgroundColor {
+		didSet {
+			let sel = self.selected
+			self.selected = sel
+		}
+	}
+
 	public private(set) var selected : Bool = false {
 		didSet {
 			if self.selected {
-				self.label.fontColor = KeyboardKeyNode.Constants.backgroundColor
-				self.shape.fillColor = KeyboardKeyNode.Constants.color
+				self.label.fontColor = self.backgroundColor
+				self.shape.fillColor = self.color
 			} else {
-				self.label.fontColor = KeyboardKeyNode.Constants.color
-				self.shape.fillColor = SKColor.clear
+				self.label.fontColor = self.color
+				self.shape.fillColor = self.backgroundColor
 			}
 		}
 	}
@@ -150,6 +161,22 @@ class KeyboardNode: SKNode {
 	private var Gs   : KeyboardKeyNode?
 	private var As   : KeyboardKeyNode?
 
+
+	public var color = DefaultConstants.color {
+		didSet {
+			for case let child as KeyboardKeyNode in self.children {
+				child.color = self.color
+			}
+		}
+	}
+
+	public var backgroundColor = DefaultConstants.backgroundColor {
+		didSet {
+			for case let child as KeyboardKeyNode in self.children {
+				child.backgroundColor = self.backgroundColor
+			}
+		}
+	}
 
 	//  MARK: init
 

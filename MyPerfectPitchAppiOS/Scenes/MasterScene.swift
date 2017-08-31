@@ -31,7 +31,7 @@ class MasterScene: SKScene {
 	}
 
 	public private(set) var frontColor = UIColor.white
-	public private(set) var middleColor = UIColor.darkGray
+	public private(set) var middleColor = UIColor(white: 1, alpha: 0.5)
 	override public internal(set) var backgroundColor : UIColor {
 		get {
 			return super.backgroundColor
@@ -41,25 +41,47 @@ class MasterScene: SKScene {
 		}
 	}
 
-	public enum ColorSchemes {
-		case dark, light, green, blue, red, purple
-	}
-
 	public var colorScheme : ColorSchemes = .dark {
 		didSet {
 			switch self.colorScheme {
 			case .dark:
-				break
+				self.frontColor = UIColor.white
+				self.backgroundColor = UIColor(red: 38/255,
+				                               green: 38/255,
+				                               blue: 38/255,
+				                               alpha: 1)
 			case .light:
-				break
+				self.frontColor = UIColor.darkText
+				self.backgroundColor = UIColor.white
+
 			case .green:
-				break
+				self.frontColor = UIColor.white
+				self.backgroundColor = UIColor(red: 38/255,
+				                               green: 76/255,
+				                               blue: 38/255,
+				                               alpha: 1)
+
 			case .blue:
-				break
+				self.frontColor = UIColor.white
+				self.backgroundColor = UIColor(red: 38/255,
+				                               green: 38/255,
+				                               blue: 76/255,
+				                               alpha: 1)
+
 			case .red:
-				break
+				self.frontColor = UIColor.white
+				self.backgroundColor = UIColor(red: 142/255,
+				                               green: 38/255,
+				                               blue: 38/255,
+				                               alpha: 1)
+
 			case .purple:
-				break
+				self.frontColor = UIColor.white
+				self.backgroundColor = UIColor(red: 76/255,
+				                               green: 38/255,
+				                               blue: 76/255,
+				                               alpha: 1)
+
 			}
 		}
 	}

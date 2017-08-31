@@ -83,41 +83,27 @@ class StartMenuScene: MasterScene {
 	}
 
 	private func appearAnimation(_ completion: @escaping () -> Void) {
-		if let label = self.title {
-			label.alpha = 0.0
-			label.run(SKAction.fadeIn(withDuration: 1.0))
-		}
+		self.colorScheme = .dark
 
-		if let label = self.training {
-			label.alpha = 0.0
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.2),
-				SKAction.fadeIn(withDuration: 1.0)
-			]))
-		}
+		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
+		for (i, child) in sortedChildren.enumerated() {
+			if let label = child as? SKLabelNode {
+				label.fontColor = self.frontColor
+			}
 
-		if let label = self.test {
-			label.alpha = 0.0
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.4),
-				SKAction.fadeIn(withDuration: 1.0)
-			]))
-		}
+			child.alpha = 0.0
+			if i == sortedChildren.count - 1 {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeIn(withDuration: 1.0)
+				]), completion: completion)
 
-		if let label = self.vs {
-			label.alpha = 0.0
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.6),
-				SKAction.fadeIn(withDuration: 1.0)
-			]), completion: completion)
-		}
-
-		if let label = self.setting {
-			label.alpha = 0.0
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.8),
-				SKAction.fadeIn(withDuration: 1.0)
-			]), completion: completion)
+			} else {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeIn(withDuration: 1.0)
+				]))
+			}
 		}
 	}
 
@@ -128,36 +114,21 @@ class StartMenuScene: MasterScene {
 	}
 
 	private func dismissAnimation(_ completion: @escaping () -> Void) {
-		if let label = self.title {
-			label.run(SKAction.fadeOut(withDuration: 1.0))
-		}
+		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
 
-		if let label = self.training {
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.2),
-				SKAction.fadeOut(withDuration: 1.0)
-			]))
-		}
+		for (i, child) in sortedChildren.enumerated() {
+			if i == sortedChildren.count - 1 {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeOut(withDuration: 1.0)
+				]), completion: completion)
 
-		if let label = self.test {
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.4),
-				SKAction.fadeOut(withDuration: 1.0)
-			]))
-		}
-
-		if let label = self.vs {
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.6),
-				SKAction.fadeOut(withDuration: 1.0)
-			]), completion: completion)
-		}
-
-		if let label = self.setting {
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.8),
-				SKAction.fadeOut(withDuration: 1.0)
-			]), completion: completion)
+			} else {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeOut(withDuration: 1.0)
+				]))
+			}
 		}
 	}
 

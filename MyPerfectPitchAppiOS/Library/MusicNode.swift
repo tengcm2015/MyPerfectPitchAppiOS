@@ -16,7 +16,6 @@ public class MusicNode : SKNode {
 
 	struct Constants {
 		static let size : CGFloat  = 50
-		static let color : SKColor = SKColor.white
 	}
 
 
@@ -30,6 +29,20 @@ public class MusicNode : SKNode {
 
 	public enum MusicNodeState {
 		case waiting, correct, error
+	}
+
+	public var color = DefaultConstants.color {
+		didSet {
+			self.label.fontColor      = self.color
+			self.shape.strokeColor    = self.color
+			self.countdownNode.color  = self.color
+		}
+	}
+
+	public var backgroundColor = DefaultConstants.backgroundColor {
+		didSet {
+			self.countdownNode.backgroundColor = self.backgroundColor
+		}
 	}
 
 	public private(set) var state : MusicNodeState = .waiting
@@ -91,7 +104,7 @@ public class MusicNode : SKNode {
 
 		self.addChild(self.shape)
 
-		self.countdownNode.color  = UIColor.white
+		self.countdownNode.color = UIColor.white
 		self.countdownNode.backgroundColor = UIColor.darkGray
 
 		self.addChild(self.countdownNode)
@@ -203,8 +216,6 @@ public class CountdownNode : SKShapeNode {
 
 	struct Constants {
 		static let radius : CGFloat          = 32
-		static let color : SKColor           = SKColor.white
-		static let backgroundColor : SKColor = SKColor.darkGray
 		static let width : CGFloat           = 2.0
 		static let progress : CGFloat        = 0.0
 		static let startAngle : CGFloat      = CGFloat(Double.pi)
@@ -223,16 +234,18 @@ public class CountdownNode : SKShapeNode {
 	}
 
 	//the active time color
-	public var color: SKColor = CountdownNode.Constants.color {
+	public var color: SKColor = DefaultConstants.color {
 		didSet {
 			self.timeNode.strokeColor = self.color
+			updateProgress(node: self)
 		}
 	}
 
 	//the background color of the timer (to hide: use clear color)
-	public var backgroundColor: SKColor = CountdownNode.Constants.backgroundColor {
+	public var backgroundColor: SKColor = DefaultConstants.backgroundColor {
 		didSet {
 			self.strokeColor = self.backgroundColor
+			updateProgress(node: self)
 		}
 	}
 
@@ -264,8 +277,8 @@ public class CountdownNode : SKShapeNode {
 	//  MARK: init
 
 	public init(radius: CGFloat = CountdownNode.Constants.radius,
-	            color: SKColor = CountdownNode.Constants.color,
-	            backgroundColor: SKColor = CountdownNode.Constants.backgroundColor,
+	            color: SKColor = DefaultConstants.color,
+	            backgroundColor: SKColor = DefaultConstants.backgroundColor,
 	            width: CGFloat = CountdownNode.Constants.width,
 	            progress: CGFloat = CountdownNode.Constants.progress) {
 
