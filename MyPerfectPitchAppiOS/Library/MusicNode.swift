@@ -10,16 +10,16 @@
 import SpriteKit
 
 
-public class MusicNode : SKNode {
+class MusicNode : SKNode {
 
-	//  MARK: constants
+	//MARK: constants
 
 	struct Constants {
 		static let size : CGFloat  = 50
 	}
 
 
-	//  MARK: properties
+	//MARK: properties
 
 	private let countdownNode = CountdownNode()
 
@@ -61,7 +61,7 @@ public class MusicNode : SKNode {
 	}
 
 
-	//  MARK: init
+	//MARK: init
 
 	public init(size: CGFloat = MusicNode.Constants.size) {
 		super.init()
@@ -84,7 +84,7 @@ public class MusicNode : SKNode {
 	}
 
 
-	//  MARK: helpers
+	//MARK: helpers
 
 	private func _init() {
 		if let customSize = self.userData?.value(forKey: "size") as? Float {
@@ -104,8 +104,8 @@ public class MusicNode : SKNode {
 
 		self.addChild(self.shape)
 
-		self.countdownNode.color = UIColor.white
-		self.countdownNode.backgroundColor = UIColor.darkGray
+		self.countdownNode.color = SKColor.white
+		self.countdownNode.backgroundColor = SKColor.darkGray
 
 		self.addChild(self.countdownNode)
 
@@ -113,7 +113,7 @@ public class MusicNode : SKNode {
 	}
 
 
-	//  MARK: API
+	//MARK: API
 
 	public func countdown(time: TimeInterval = 1.0,
 	                      completionHandler: ((Void) -> Void)?) {
@@ -210,20 +210,20 @@ public class MusicNode : SKNode {
 	}
 }
 
-public class CountdownNode : SKShapeNode {
+private class CountdownNode : SKShapeNode {
 
-	//  MARK: constants
+	//MARK: constants
 
 	struct Constants {
-		static let radius : CGFloat          = 32
-		static let width : CGFloat           = 2.0
-		static let progress : CGFloat        = 0.0
-		static let startAngle : CGFloat      = CGFloat(Double.pi)
-		static let actionKey         = "_CountdownNodeActionKey"
+		static let radius     : CGFloat = 32
+		static let width      : CGFloat = 2.0
+		static let progress   : CGFloat = 0.0
+		static let startAngle : CGFloat = CGFloat(Double.pi)
+		static let actionKey = "_CountdownNodeActionKey"
 	}
 
 
-	//  MARK: properties
+	//MARK: properties
 
 	/// the radius of the progress node
 	public var radius: CGFloat = CountdownNode.Constants.radius {
@@ -274,7 +274,7 @@ public class CountdownNode : SKShapeNode {
 	private let timeNode = SKShapeNode()
 
 
-	//  MARK: init
+	//MARK: init
 
 	public init(radius: CGFloat = CountdownNode.Constants.radius,
 	            color: SKColor = DefaultConstants.color,
@@ -306,7 +306,7 @@ public class CountdownNode : SKShapeNode {
 	}
 
 
-	//  MARK: helpers
+	//MARK: helpers
 
 	private func _init() {
 		self.timeNode.lineWidth   = self.width
@@ -335,7 +335,7 @@ public class CountdownNode : SKShapeNode {
 	}
 
 
-	//  MARK: API
+	//MARK: API
 
 	/*!
 	 The countdown method counts down from a time interval to zero,

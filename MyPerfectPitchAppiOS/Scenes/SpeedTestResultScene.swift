@@ -1,25 +1,35 @@
 import SpriteKit
 import GameplayKit
 
-class SettingsScene: MasterScene {
+class SpeedTestResultScene: MasterScene {
 
 	//MARK: Properties
 
-	private var title    : SKLabelNode?
-	private var arrange  : SKLabelNode?
-	private var keySign  : SKLabelNode?
-	private var theme    : SKLabelNode?
-	private var mainMenu : SKLabelNode?
+	var score : Int?
+	var message : String?
+
+	private var title          : SKLabelNode?
+	private var scoreNode      : SKLabelNode?
+	private var messageNode    : SKLabelNode?
+	private var retry          : SKLabelNode?
+	private var menu           : SKLabelNode?
 
 	override func didMove(to view: SKView) {
 		super.didMove(to: view)
 
 		// Get label nodes from scene and store it for use later
-		self.title    = self.childNode(withName: "//title"   ) as? SKLabelNode
-		self.arrange  = self.childNode(withName: "//arrange" ) as? SKLabelNode
-		self.keySign  = self.childNode(withName: "//keySign" ) as? SKLabelNode
-		self.theme    = self.childNode(withName: "//theme"   ) as? SKLabelNode
-		self.mainMenu = self.childNode(withName: "//return"  ) as? SKLabelNode
+		self.title          = self.childNode(withName: "//title"      ) as? SKLabelNode
+		self.scoreNode      = self.childNode(withName: "//score"      ) as? SKLabelNode
+		self.messageNode    = self.childNode(withName: "//message"    ) as? SKLabelNode
+		self.retry          = self.childNode(withName: "//retry"      ) as? SKLabelNode
+		self.menu           = self.childNode(withName: "//return"     ) as? SKLabelNode
+
+		if let score = self.score {
+			self.scoreNode?.text = String(score)
+		}
+		if let message = self.message {
+			self.messageNode?.text = message
+		}
 
 		appearAnimation()
 
@@ -29,6 +39,9 @@ class SettingsScene: MasterScene {
 		let node = nodes.last
 		if let name = node?.name {
 			switch name {
+			case "retry":
+				goToSpeedTestScene()
+
 			case "return":
 				goToStartMenuScene()
 
@@ -54,6 +67,12 @@ class SettingsScene: MasterScene {
 		self.goToScene(scene)
 	}
 
+	private func goToSpeedTestScene() {
+		let scene = SKScene(fileNamed: "SpeedTestScene") as! SpeedTestScene
+		scene.score = 0
+		self.goToScene(scene)
+	}
+
 	//MARK: Animations
 
 	private func appearAnimation() {
@@ -63,6 +82,7 @@ class SettingsScene: MasterScene {
 	}
 
 	private func appearAnimation(_ completion: @escaping () -> Void) {
+
 		self.colorScheme = .dark
 
 		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
@@ -111,4 +131,5 @@ class SettingsScene: MasterScene {
 			}
 		}
 	}
+
 }

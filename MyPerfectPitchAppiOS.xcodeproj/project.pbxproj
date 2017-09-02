@@ -9,10 +9,8 @@
 /* Begin PBXBuildFile section */
 		9C3E04FB1F11C94600339A92 /* DifficultyMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C3E04F31F11C94600339A92 /* DifficultyMenuScene.sks */; };
 		9C3E04FC1F11C94600339A92 /* DifficultyMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3E04F41F11C94600339A92 /* DifficultyMenuScene.swift */; };
-		9C3E04FD1F11C94600339A92 /* QuestionScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C3E04F51F11C94600339A92 /* QuestionScene.sks */; };
-		9C3E04FE1F11C94600339A92 /* QuestionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3E04F61F11C94600339A92 /* QuestionScene.swift */; };
-		9C3E04FF1F11C94600339A92 /* ResultScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C3E04F71F11C94600339A92 /* ResultScene.sks */; };
-		9C3E05001F11C94600339A92 /* ResultScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3E04F81F11C94600339A92 /* ResultScene.swift */; };
+		9C3E04FD1F11C94600339A92 /* TrainingScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C3E04F51F11C94600339A92 /* TrainingScene.sks */; };
+		9C3E04FE1F11C94600339A92 /* TrainingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3E04F61F11C94600339A92 /* TrainingScene.swift */; };
 		9C3E05011F11C94600339A92 /* StartMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C3E04F91F11C94600339A92 /* StartMenuScene.sks */; };
 		9C3E05021F11C94600339A92 /* StartMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3E04FA1F11C94600339A92 /* StartMenuScene.swift */; };
 		9C622C0B1F373A70007DFD49 /* piano_a.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C622BFF1F373A70007DFD49 /* piano_a.wav */; };
@@ -39,15 +37,21 @@
 		9CE650601F135D5300E2A81A /* SettingsScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9CE6505E1F135D5300E2A81A /* SettingsScene.sks */; };
 		9CE650611F135D5300E2A81A /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE6505F1F135D5300E2A81A /* SettingsScene.swift */; };
 		9CFAC6F11F49DA94003EF27E /* Definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFAC6F01F49DA94003EF27E /* Definitions.swift */; };
+		9CFB39CE1F5A2F4500C9B53B /* ModeSelectScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9CFB39CA1F5A2F4400C9B53B /* ModeSelectScene.sks */; };
+		9CFB39CF1F5A2F4500C9B53B /* ModeSelectScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFB39CB1F5A2F4500C9B53B /* ModeSelectScene.swift */; };
+		9CFB39D01F5A2F4500C9B53B /* SpeedTestScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9CFB39CC1F5A2F4500C9B53B /* SpeedTestScene.sks */; };
+		9CFB39D11F5A2F4500C9B53B /* SpeedTestScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFB39CD1F5A2F4500C9B53B /* SpeedTestScene.swift */; };
+		9CFB39D61F5A360600C9B53B /* TrainingResultScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9CFB39D21F5A360600C9B53B /* TrainingResultScene.sks */; };
+		9CFB39D71F5A360600C9B53B /* TrainingResultScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFB39D31F5A360600C9B53B /* TrainingResultScene.swift */; };
+		9CFB39D81F5A360600C9B53B /* SpeedTestResultScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9CFB39D41F5A360600C9B53B /* SpeedTestResultScene.sks */; };
+		9CFB39D91F5A360600C9B53B /* SpeedTestResultScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFB39D51F5A360600C9B53B /* SpeedTestResultScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9C3E04F31F11C94600339A92 /* DifficultyMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = DifficultyMenuScene.sks; path = Scenes/DifficultyMenuScene.sks; sourceTree = "<group>"; };
 		9C3E04F41F11C94600339A92 /* DifficultyMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DifficultyMenuScene.swift; path = Scenes/DifficultyMenuScene.swift; sourceTree = "<group>"; };
-		9C3E04F51F11C94600339A92 /* QuestionScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = QuestionScene.sks; path = Scenes/QuestionScene.sks; sourceTree = "<group>"; };
-		9C3E04F61F11C94600339A92 /* QuestionScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QuestionScene.swift; path = Scenes/QuestionScene.swift; sourceTree = "<group>"; };
-		9C3E04F71F11C94600339A92 /* ResultScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = ResultScene.sks; path = Scenes/ResultScene.sks; sourceTree = "<group>"; };
-		9C3E04F81F11C94600339A92 /* ResultScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultScene.swift; path = Scenes/ResultScene.swift; sourceTree = "<group>"; };
+		9C3E04F51F11C94600339A92 /* TrainingScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = TrainingScene.sks; path = Scenes/TrainingScene.sks; sourceTree = "<group>"; };
+		9C3E04F61F11C94600339A92 /* TrainingScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrainingScene.swift; path = Scenes/TrainingScene.swift; sourceTree = "<group>"; };
 		9C3E04F91F11C94600339A92 /* StartMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = StartMenuScene.sks; path = Scenes/StartMenuScene.sks; sourceTree = "<group>"; };
 		9C3E04FA1F11C94600339A92 /* StartMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StartMenuScene.swift; path = Scenes/StartMenuScene.swift; sourceTree = "<group>"; };
 		9C622BFF1F373A70007DFD49 /* piano_a.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = piano_a.wav; sourceTree = "<group>"; };
@@ -65,7 +69,7 @@
 		9C622C171F373F3E007DFD49 /* KeyboardNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardNode.swift; sourceTree = "<group>"; };
 		9C7E34491F2C184B00DD723E /* MusicNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicNode.swift; sourceTree = "<group>"; };
 		9CA2F1EB1F19AF6500F376D0 /* MasterScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MasterScene.swift; path = Scenes/MasterScene.swift; sourceTree = "<group>"; };
-		9CB1C3D21F10663700F3C01A /* MyPerfectPitchAppiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyPerfectPitchAppiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CB1C3D21F10663700F3C01A /* Perfect Pitch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Perfect Pitch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB1C3D51F10663700F3C01A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9CB1C3D91F10663700F3C01A /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		9CB1C3DD1F10663700F3C01A /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +80,14 @@
 		9CE6505E1F135D5300E2A81A /* SettingsScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = SettingsScene.sks; path = Scenes/SettingsScene.sks; sourceTree = "<group>"; };
 		9CE6505F1F135D5300E2A81A /* SettingsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsScene.swift; path = Scenes/SettingsScene.swift; sourceTree = "<group>"; };
 		9CFAC6F01F49DA94003EF27E /* Definitions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Definitions.swift; sourceTree = "<group>"; };
+		9CFB39CA1F5A2F4400C9B53B /* ModeSelectScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = ModeSelectScene.sks; path = Scenes/ModeSelectScene.sks; sourceTree = "<group>"; };
+		9CFB39CB1F5A2F4500C9B53B /* ModeSelectScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModeSelectScene.swift; path = Scenes/ModeSelectScene.swift; sourceTree = "<group>"; };
+		9CFB39CC1F5A2F4500C9B53B /* SpeedTestScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = SpeedTestScene.sks; path = Scenes/SpeedTestScene.sks; sourceTree = "<group>"; };
+		9CFB39CD1F5A2F4500C9B53B /* SpeedTestScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpeedTestScene.swift; path = Scenes/SpeedTestScene.swift; sourceTree = "<group>"; };
+		9CFB39D21F5A360600C9B53B /* TrainingResultScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = TrainingResultScene.sks; path = Scenes/TrainingResultScene.sks; sourceTree = "<group>"; };
+		9CFB39D31F5A360600C9B53B /* TrainingResultScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrainingResultScene.swift; path = Scenes/TrainingResultScene.swift; sourceTree = "<group>"; };
+		9CFB39D41F5A360600C9B53B /* SpeedTestResultScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = SpeedTestResultScene.sks; path = Scenes/SpeedTestResultScene.sks; sourceTree = "<group>"; };
+		9CFB39D51F5A360600C9B53B /* SpeedTestResultScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpeedTestResultScene.swift; path = Scenes/SpeedTestResultScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,10 +111,16 @@
 				9CE6505F1F135D5300E2A81A /* SettingsScene.swift */,
 				9C3E04F31F11C94600339A92 /* DifficultyMenuScene.sks */,
 				9C3E04F41F11C94600339A92 /* DifficultyMenuScene.swift */,
-				9C3E04F51F11C94600339A92 /* QuestionScene.sks */,
-				9C3E04F61F11C94600339A92 /* QuestionScene.swift */,
-				9C3E04F71F11C94600339A92 /* ResultScene.sks */,
-				9C3E04F81F11C94600339A92 /* ResultScene.swift */,
+				9C3E04F51F11C94600339A92 /* TrainingScene.sks */,
+				9C3E04F61F11C94600339A92 /* TrainingScene.swift */,
+				9CFB39D21F5A360600C9B53B /* TrainingResultScene.sks */,
+				9CFB39D31F5A360600C9B53B /* TrainingResultScene.swift */,
+				9CFB39CA1F5A2F4400C9B53B /* ModeSelectScene.sks */,
+				9CFB39CB1F5A2F4500C9B53B /* ModeSelectScene.swift */,
+				9CFB39CC1F5A2F4500C9B53B /* SpeedTestScene.sks */,
+				9CFB39CD1F5A2F4500C9B53B /* SpeedTestScene.swift */,
+				9CFB39D41F5A360600C9B53B /* SpeedTestResultScene.sks */,
+				9CFB39D51F5A360600C9B53B /* SpeedTestResultScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -147,7 +165,7 @@
 		9CB1C3D31F10663700F3C01A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9CB1C3D21F10663700F3C01A /* MyPerfectPitchAppiOS.app */,
+				9CB1C3D21F10663700F3C01A /* Perfect Pitch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -172,9 +190,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9CB1C3D11F10663700F3C01A /* MyPerfectPitchAppiOS */ = {
+		9CB1C3D11F10663700F3C01A /* Perfect Pitch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9CB1C3EA1F10663700F3C01A /* Build configuration list for PBXNativeTarget "MyPerfectPitchAppiOS" */;
+			buildConfigurationList = 9CB1C3EA1F10663700F3C01A /* Build configuration list for PBXNativeTarget "Perfect Pitch" */;
 			buildPhases = (
 				9CB1C3CE1F10663700F3C01A /* Sources */,
 				9CB1C3CF1F10663700F3C01A /* Frameworks */,
@@ -184,9 +202,9 @@
 			);
 			dependencies = (
 			);
-			name = MyPerfectPitchAppiOS;
+			name = "Perfect Pitch";
 			productName = MyPerfectPitchAppiOS;
-			productReference = 9CB1C3D21F10663700F3C01A /* MyPerfectPitchAppiOS.app */;
+			productReference = 9CB1C3D21F10663700F3C01A /* Perfect Pitch.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -219,7 +237,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9CB1C3D11F10663700F3C01A /* MyPerfectPitchAppiOS */,
+				9CB1C3D11F10663700F3C01A /* Perfect Pitch */,
 			);
 		};
 /* End PBXProject section */
@@ -231,7 +249,6 @@
 			files = (
 				9C622C141F373A70007DFD49 /* piano_fs.wav in Resources */,
 				9CE650601F135D5300E2A81A /* SettingsScene.sks in Resources */,
-				9C3E04FF1F11C94600339A92 /* ResultScene.sks in Resources */,
 				9C622C0F1F373A70007DFD49 /* piano_cs.wav in Resources */,
 				9C622C0B1F373A70007DFD49 /* piano_a.wav in Resources */,
 				9C622C0D1F373A70007DFD49 /* piano_b.wav in Resources */,
@@ -240,14 +257,18 @@
 				9CB1C3E11F10663700F3C01A /* Main.storyboard in Resources */,
 				9C3E05011F11C94600339A92 /* StartMenuScene.sks in Resources */,
 				9C3E04FB1F11C94600339A92 /* DifficultyMenuScene.sks in Resources */,
+				9CFB39D61F5A360600C9B53B /* TrainingResultScene.sks in Resources */,
 				9C622C0E1F373A70007DFD49 /* piano_c.wav in Resources */,
+				9CFB39D81F5A360600C9B53B /* SpeedTestResultScene.sks in Resources */,
 				9C622C101F373A70007DFD49 /* piano_d.wav in Resources */,
 				9CB1C3E31F10663700F3C01A /* Assets.xcassets in Resources */,
 				9CB1C3E61F10663700F3C01A /* LaunchScreen.storyboard in Resources */,
 				9C622C0C1F373A70007DFD49 /* piano_as.wav in Resources */,
 				9C622C151F373A70007DFD49 /* piano_g.wav in Resources */,
+				9CFB39CE1F5A2F4500C9B53B /* ModeSelectScene.sks in Resources */,
 				9C622C131F373A70007DFD49 /* piano_f.wav in Resources */,
-				9C3E04FD1F11C94600339A92 /* QuestionScene.sks in Resources */,
+				9CFB39D01F5A2F4500C9B53B /* SpeedTestScene.sks in Resources */,
+				9C3E04FD1F11C94600339A92 /* TrainingScene.sks in Resources */,
 				9CB1C3DA1F10663700F3C01A /* Actions.sks in Resources */,
 				9C622C161F373A70007DFD49 /* piano_gs.wav in Resources */,
 			);
@@ -262,11 +283,14 @@
 			files = (
 				9C3E05021F11C94600339A92 /* StartMenuScene.swift in Sources */,
 				9CE650611F135D5300E2A81A /* SettingsScene.swift in Sources */,
+				9CFB39D91F5A360600C9B53B /* SpeedTestResultScene.swift in Sources */,
+				9CFB39D71F5A360600C9B53B /* TrainingResultScene.swift in Sources */,
 				9C622C181F373F3E007DFD49 /* KeyboardNode.swift in Sources */,
+				9CFB39CF1F5A2F4500C9B53B /* ModeSelectScene.swift in Sources */,
+				9CFB39D11F5A2F4500C9B53B /* SpeedTestScene.swift in Sources */,
 				9CB1C3DE1F10663700F3C01A /* GameViewController.swift in Sources */,
-				9C3E04FE1F11C94600339A92 /* QuestionScene.swift in Sources */,
+				9C3E04FE1F11C94600339A92 /* TrainingScene.swift in Sources */,
 				9C3E04FC1F11C94600339A92 /* DifficultyMenuScene.swift in Sources */,
-				9C3E05001F11C94600339A92 /* ResultScene.swift in Sources */,
 				9C7E344A1F2C184B00DD723E /* MusicNode.swift in Sources */,
 				9CA2F1EC1F19AF6500F376D0 /* MasterScene.swift in Sources */,
 				9CB1C3D61F10663700F3C01A /* AppDelegate.swift in Sources */,
@@ -427,7 +451,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9CB1C3EA1F10663700F3C01A /* Build configuration list for PBXNativeTarget "MyPerfectPitchAppiOS" */ = {
+		9CB1C3EA1F10663700F3C01A /* Build configuration list for PBXNativeTarget "Perfect Pitch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9CB1C3EB1F10663700F3C01A /* Debug */,

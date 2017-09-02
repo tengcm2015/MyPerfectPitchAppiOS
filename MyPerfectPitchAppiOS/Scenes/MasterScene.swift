@@ -30,9 +30,9 @@ class MasterScene: SKScene {
 		}
 	}
 
-	public private(set) var frontColor = UIColor.white
-	public private(set) var middleColor = UIColor(white: 1, alpha: 0.5)
-	override public internal(set) var backgroundColor : UIColor {
+	public private(set) var frontColor = SKColor.white
+	public private(set) var middleColor = SKColor(white: 1, alpha: 0.5)
+	override public internal(set) var backgroundColor : SKColor {
 		get {
 			return super.backgroundColor
 		}
@@ -45,39 +45,39 @@ class MasterScene: SKScene {
 		didSet {
 			switch self.colorScheme {
 			case .dark:
-				self.frontColor = UIColor.white
-				self.backgroundColor = UIColor(red: 38/255,
+				self.frontColor = SKColor.white
+				self.backgroundColor = SKColor(red: 38/255,
 				                               green: 38/255,
 				                               blue: 38/255,
 				                               alpha: 1)
 			case .light:
-				self.frontColor = UIColor.darkText
-				self.backgroundColor = UIColor.white
+				self.frontColor = SKColor.darkText
+				self.backgroundColor = SKColor.white
 
 			case .green:
-				self.frontColor = UIColor.white
-				self.backgroundColor = UIColor(red: 38/255,
+				self.frontColor = SKColor.white
+				self.backgroundColor = SKColor(red: 38/255,
 				                               green: 76/255,
 				                               blue: 38/255,
 				                               alpha: 1)
 
 			case .blue:
-				self.frontColor = UIColor.white
-				self.backgroundColor = UIColor(red: 38/255,
+				self.frontColor = SKColor.white
+				self.backgroundColor = SKColor(red: 38/255,
 				                               green: 38/255,
 				                               blue: 76/255,
 				                               alpha: 1)
 
 			case .red:
-				self.frontColor = UIColor.white
-				self.backgroundColor = UIColor(red: 142/255,
+				self.frontColor = SKColor.white
+				self.backgroundColor = SKColor(red: 142/255,
 				                               green: 38/255,
 				                               blue: 38/255,
 				                               alpha: 1)
 
 			case .purple:
-				self.frontColor = UIColor.white
-				self.backgroundColor = UIColor(red: 76/255,
+				self.frontColor = SKColor.white
+				self.backgroundColor = SKColor(red: 76/255,
 				                               green: 38/255,
 				                               blue: 76/255,
 				                               alpha: 1)
@@ -107,9 +107,10 @@ class MasterScene: SKScene {
 	}
 
 	// override this method in subclasses to handle clicks
-	func handleClick(_ nodes: [SKNode]) {
+	internal func handleClick(_ nodes: [SKNode]) {
 		print(nodes)
 	}
+
 
 	//MARK: Private Methods
 

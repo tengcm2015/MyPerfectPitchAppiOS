@@ -42,53 +42,48 @@ class DifficultyMenuScene: MasterScene {
 		if let name = node?.name {
 			switch name {
 			case "easy":
-				goToQuestionScene(.easy)
-				break
+				goToTrainingScene(.easy)
+
 			case "normal":
-				goToQuestionScene(.normal)
-				break
+				goToTrainingScene(.normal)
+
 			case "hard":
-				goToQuestionScene(.hard)
-				break
+				goToTrainingScene(.hard)
+
 			case "lunatic":
-				goToQuestionScene(.lunatic)
-				break
+				goToTrainingScene(.lunatic)
+
 			case "return":
 				goToStartMenuScene()
-				break
+
 			default:
-				break
+				print(name)
+
 			}
 		}
 	}
 
 	//MARK: Scene Trasitions
 
-	private func goToStartMenuScene() {
-		if let scene = SKScene(fileNamed: "StartMenuScene") as? StartMenuScene {
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
+	private func goToScene(_ scene : SKScene) {
+		// Set the scale mode to scale to fit the window
+		scene.scaleMode = .aspectFill
+		dismissAnimation {
+			// Present the scene
+			self.view?.presentScene(scene)
 		}
 	}
 
-	private func goToQuestionScene(_ difficulty : GameDifficulties) {
-		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
-			scene.score = 0
-			scene.difficulty = difficulty
+	private func goToStartMenuScene() {
+		let scene = SKScene(fileNamed: "StartMenuScene") as! StartMenuScene
+		self.goToScene(scene)
+	}
 
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
+	private func goToTrainingScene(_ difficulty : GameDifficulties) {
+		let scene = SKScene(fileNamed: "TrainingScene") as! TrainingScene
+		scene.score = 0
+		scene.difficulty = difficulty
+		self.goToScene(scene)
 	}
 
 	//MARK: Animations

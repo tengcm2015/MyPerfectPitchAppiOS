@@ -7,7 +7,7 @@ class StartMenuScene: MasterScene {
 
 	private var title    : SKLabelNode?
 	private var training : SKLabelNode?
-	private var test     : SKLabelNode?
+	private var trials   : SKLabelNode?
 	private var vs       : SKLabelNode?
 	private var setting  : SKLabelNode?
 
@@ -17,7 +17,7 @@ class StartMenuScene: MasterScene {
 		// Get label nodes from scene and store it for use later
 		self.title    = self.childNode(withName: "//title"   ) as? SKLabelNode
 		self.training = self.childNode(withName: "//training") as? SKLabelNode
-		self.test     = self.childNode(withName: "//test"    ) as? SKLabelNode
+		self.trials   = self.childNode(withName: "//trials"  ) as? SKLabelNode
 		self.vs       = self.childNode(withName: "//vs"      ) as? SKLabelNode
 		self.setting  = self.childNode(withName: "//setting" ) as? SKLabelNode
 
@@ -30,48 +30,48 @@ class StartMenuScene: MasterScene {
 			switch name {
 			case "training":
 				goToDiffcultyScene("Training")
-				break
-			case "test":
-				goToDiffcultyScene("Test")
-				break
+
+			case "trials":
+				goToModeSelectScene("Trials")
+
 			case "vs":
-				goToDiffcultyScene("Versus")
-				break
+				print(name)
+
 			case "setting":
 				goToSettingsScene()
-				break
+
 			default:
-				break
+				print(name)
 			}
 		}
 	}
 
 	//MARK: Scene Transitions
 
-	private func goToDiffcultyScene(_ mode : String) {
-		if let scene = SKScene(fileNamed: "DifficultyMenuScene") as? DifficultyMenuScene {
-			scene.mode = mode
-
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
+	private func goToScene(_ scene : SKScene) {
+		// Set the scale mode to scale to fit the window
+		scene.scaleMode = .aspectFill
+		dismissAnimation {
+			// Present the scene
+			self.view?.presentScene(scene)
 		}
 	}
 
-	private func goToSettingsScene() {
-		if let scene = SKScene(fileNamed: "SettingsScene") as? SettingsScene {
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
+	private func goToDiffcultyScene(_ mode : String) {
+		let scene = SKScene(fileNamed: "DifficultyMenuScene") as! DifficultyMenuScene
+		scene.mode = mode
+		self.goToScene(scene)
+	}
 
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
+	private func goToModeSelectScene(_ mode : String) {
+		let scene = SKScene(fileNamed: "ModeSelectScene") as! ModeSelectScene
+		scene.mode = mode
+		self.goToScene(scene)
+	}
+
+	private func goToSettingsScene() {
+		let scene = SKScene(fileNamed: "SettingsScene") as! SettingsScene
+		self.goToScene(scene)
 	}
 
 	//MARK: Animations

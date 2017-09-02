@@ -1,15 +1,179 @@
 import SpriteKit
 
+class KeyboardNode: SKNode {
+
+	//MARK: Properties
+
+	private var C    : KeyboardKeyNode?
+	private var D    : KeyboardKeyNode?
+	private var E    : KeyboardKeyNode?
+	private var F    : KeyboardKeyNode?
+	private var G    : KeyboardKeyNode?
+	private var A    : KeyboardKeyNode?
+	private var B    : KeyboardKeyNode?
+	private var Cs   : KeyboardKeyNode?
+	private var Ds   : KeyboardKeyNode?
+	private var Fs   : KeyboardKeyNode?
+	private var Gs   : KeyboardKeyNode?
+	private var As   : KeyboardKeyNode?
+
+
+	public var color = DefaultConstants.color {
+		didSet {
+			for case let child as KeyboardKeyNode in self.children {
+				child.color = self.color
+			}
+		}
+	}
+
+	public var backgroundColor = DefaultConstants.backgroundColor {
+		didSet {
+			for case let child as KeyboardKeyNode in self.children {
+				child.backgroundColor = self.backgroundColor
+			}
+		}
+	}
+
+	//MARK: init
+
+	override init() {
+		super.init()
+
+		self._init()
+	}
+
+	required public init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+
+		self._init()
+	}
+
+
+	//MARK: helpers
+
+	private func getKeyNode(_ pitch: MusicNodePitch) -> KeyboardKeyNode? {
+		guard
+			let node = self.childNode(withName: "//" + pitch.rawValue) as? KeyboardKeyNode
+			else {
+				return nil
+		}
+
+		node.pitch = pitch
+
+		if let keySize = self.userData?.value(forKey: "keySize") as? Float {
+			node.size = CGFloat(keySize)
+		}
+
+		return node
+	}
+
+	private func _init() {
+		self.C    = getKeyNode(.c)
+		self.D    = getKeyNode(.d)
+		self.E    = getKeyNode(.e)
+		self.F    = getKeyNode(.f)
+		self.G    = getKeyNode(.g)
+		self.A    = getKeyNode(.a)
+		self.B    = getKeyNode(.b)
+		self.Cs   = getKeyNode(.csharp)
+		self.Ds   = getKeyNode(.dsharp)
+		self.Fs   = getKeyNode(.fsharp)
+		self.Gs   = getKeyNode(.gsharp)
+		self.As   = getKeyNode(.asharp)
+	}
+
+
+	//MARK: API
+
+	public func hide () {
+		self.isHidden = true
+	}
+
+	public func show () {
+		self.isHidden = false
+	}
+
+	public func appearAnimation () {
+		appearAnimation {
+			print("keyboard appeared")
+		}
+	}
+
+	public func appearAnimation(_ completion: @escaping () -> Void) {
+		let sortedChildren = self.children
+			.sorted(by: {$0.position.y > $1.position.y})
+		for (i, child) in sortedChildren.enumerated() {
+			child.alpha = 0.0
+			if i == sortedChildren.count - 1 {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeIn(withDuration: 1.0)
+					]), completion: completion)
+
+			} else {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeIn(withDuration: 1.0)
+					]))
+			}
+		}
+	}
+
+	public func dismissAnimation () {
+		dismissAnimation {
+			print("keyboard dismissed")
+		}
+	}
+
+	public func dismissAnimation(_ completion: @escaping () -> Void) {
+		let sortedChildren = self.children
+			.sorted(by: {$0.position.y > $1.position.y})
+		for (i, child) in sortedChildren.enumerated() {
+			if i == sortedChildren.count - 1 {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeOut(withDuration: 1.0)
+					]), completion: completion)
+
+			} else {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeOut(withDuration: 1.0)
+					]))
+			}
+		}
+	}
+
+	public func clicked(_ nodes: [SKNode]) -> KeyboardKeyNode? {
+		return nodes.last as? KeyboardKeyNode
+	}
+
+	public func selected() -> [KeyboardKeyNode] {
+		return self.children.filter {
+			guard let keyNode = $0 as? KeyboardKeyNode else {
+				return false
+			}
+			return keyNode.selected
+		} as! [KeyboardKeyNode]
+	}
+
+	public func reset() {
+		for node in self.selected() {
+			node.toggle()
+		}
+	}
+}
+
 class KeyboardKeyNode: SKNode {
 
-	//  MARK: constants
+	//MARK: constants
 
 	struct Constants {
 		static let size : CGFloat = 50
 	}
 
 
-	//  MARK: properties
+	//MARK: properties
 
 	private let label = SKLabelNode()
 
@@ -89,7 +253,7 @@ class KeyboardKeyNode: SKNode {
 		}
 	}
 
-	//  MARK: init
+	//MARK: init
 
 	public init(size: CGFloat = KeyboardKeyNode.Constants.size,
 	            pitch: MusicNodePitch = .c) {
@@ -118,7 +282,7 @@ class KeyboardKeyNode: SKNode {
 	}
 
 
-	//  MARK: helpers
+	//MARK: helpers
 
 	private func _init() {
 		self.shape.lineWidth = 3
@@ -136,174 +300,10 @@ class KeyboardKeyNode: SKNode {
 		self.selected = false
 	}
 
-	// MARK: API
+	//MARK: API
 
 	public func toggle() {
 		self.selected = !self.selected
 	}
 
-}
-
-class KeyboardNode: SKNode {
-
-	//MARK: Properties
-
-	private var C    : KeyboardKeyNode?
-	private var D    : KeyboardKeyNode?
-	private var E    : KeyboardKeyNode?
-	private var F    : KeyboardKeyNode?
-	private var G    : KeyboardKeyNode?
-	private var A    : KeyboardKeyNode?
-	private var B    : KeyboardKeyNode?
-	private var Cs   : KeyboardKeyNode?
-	private var Ds   : KeyboardKeyNode?
-	private var Fs   : KeyboardKeyNode?
-	private var Gs   : KeyboardKeyNode?
-	private var As   : KeyboardKeyNode?
-
-
-	public var color = DefaultConstants.color {
-		didSet {
-			for case let child as KeyboardKeyNode in self.children {
-				child.color = self.color
-			}
-		}
-	}
-
-	public var backgroundColor = DefaultConstants.backgroundColor {
-		didSet {
-			for case let child as KeyboardKeyNode in self.children {
-				child.backgroundColor = self.backgroundColor
-			}
-		}
-	}
-
-	//  MARK: init
-
-	override init() {
-		super.init()
-
-		self._init()
-	}
-
-	required public init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-
-		self._init()
-	}
-
-
-	//  MARK: helpers
-
-	private func getKeyNode(_ pitch: MusicNodePitch) -> KeyboardKeyNode? {
-		guard
-			let node = self.childNode(withName: "//" + pitch.rawValue) as? KeyboardKeyNode
-		else {
-			return nil
-		}
-
-		node.pitch = pitch
-
-		if let keySize = self.userData?.value(forKey: "keySize") as? Float {
-			node.size = CGFloat(keySize)
-		}
-
-		return node
-	}
-
-	private func _init() {
-		self.C    = getKeyNode(.c)
-		self.D    = getKeyNode(.d)
-		self.E    = getKeyNode(.e)
-		self.F    = getKeyNode(.f)
-		self.G    = getKeyNode(.g)
-		self.A    = getKeyNode(.a)
-		self.B    = getKeyNode(.b)
-		self.Cs   = getKeyNode(.csharp)
-		self.Ds   = getKeyNode(.dsharp)
-		self.Fs   = getKeyNode(.fsharp)
-		self.Gs   = getKeyNode(.gsharp)
-		self.As   = getKeyNode(.asharp)
-	}
-
-
-	//  MARK: API
-
-	public func hide () {
-		self.isHidden = true
-	}
-
-	public func show () {
-		self.isHidden = false
-	}
-
-	public func appearAnimation () {
-		appearAnimation {
-			print("keyboard appeared")
-		}
-	}
-
-	public func appearAnimation(_ completion: @escaping () -> Void) {
-		let sortedChildren = self.children
-		                         .sorted(by: {$0.position.y > $1.position.y})
-		for (i, child) in sortedChildren.enumerated() {
-			child.alpha = 0.0
-			if i == sortedChildren.count - 1 {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
-				]), completion: completion)
-
-			} else {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
-				]))
-			}
-		}
-	}
-
-	public func dismissAnimation () {
-		dismissAnimation {
-			print("keyboard dismissed")
-		}
-	}
-
-	public func dismissAnimation(_ completion: @escaping () -> Void) {
-		let sortedChildren = self.children
-		                         .sorted(by: {$0.position.y > $1.position.y})
-		for (i, child) in sortedChildren.enumerated() {
-			if i == sortedChildren.count - 1 {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeOut(withDuration: 1.0)
-				]), completion: completion)
-
-			} else {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeOut(withDuration: 1.0)
-				]))
-			}
-		}
-	}
-
-	public func clicked(_ nodes: [SKNode]) -> KeyboardKeyNode? {
-		return nodes.last as? KeyboardKeyNode
-	}
-
-	public func selected() -> [KeyboardKeyNode] {
-		return self.children.filter {
-			guard let keyNode = $0 as? KeyboardKeyNode else {
-				return false
-			}
-			return keyNode.selected
-		} as! [KeyboardKeyNode]
-	}
-
-	public func reset() {
-		for node in self.selected() {
-			node.toggle()
-		}
-	}
 }

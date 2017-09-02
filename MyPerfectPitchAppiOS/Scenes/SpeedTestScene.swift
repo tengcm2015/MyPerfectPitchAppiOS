@@ -1,254 +1,13 @@
 import SpriteKit
 import GameplayKit
 
-class PauseMenuNode: SKNode {
+class SpeedTestScene: MasterScene {
 
 	//MARK: Properties
 
-	private var retry      : SKLabelNode?
-	private var difficulty : SKLabelNode?
-	private var mainMenu   : SKLabelNode?
-	private var resume     : SKLabelNode?
-
-	//  MARK: init
-
-	override init() {
-		super.init()
-
-		self._init()
-	}
-
-	required public init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-
-		self._init()
-	}
-
-	//  MARK: helpers
-
-	private func _init () {
-		self.retry      = self.childNode(withName: "//retry"     ) as? SKLabelNode
-		self.difficulty = self.childNode(withName: "//difficulty") as? SKLabelNode
-		self.mainMenu   = self.childNode(withName: "//mainMenu"  ) as? SKLabelNode
-		self.resume     = self.childNode(withName: "//resume"    ) as? SKLabelNode
-	}
-
-	//  MARK: API
-
-	public func hide () {
-		self.isHidden = true
-	}
-
-	public func show () {
-		self.isHidden = false
-	}
-
-	public func clicked(_ nodes: [SKNode]) -> SKNode? {
-		return nodes.last
-	}
-
-	public func setColor(_ color: SKColor) {
-		for case let label as SKLabelNode in self.children {
-			label.fontColor = color
-		}
-	}
-
-	//MARK: Animations
-
-	fileprivate func appearAnimation () {
-		appearAnimation {
-			print("pause menu appeared")
-		}
-	}
-
-	fileprivate func appearAnimation(_ completion: @escaping () -> Void) {
-		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
-		for (i, child) in sortedChildren.enumerated() {
-			child.alpha = 0.0
-			if i == sortedChildren.count - 1 {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
-				]), completion: completion)
-
-			} else {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
-				]))
-			}
-		}
-	}
-
-	fileprivate func dismissAnimation () {
-		dismissAnimation {
-			print("pause menu dismissed")
-		}
-	}
-
-	fileprivate func dismissAnimation(_ completion: @escaping () -> Void) {
-		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
-		for (i, child) in sortedChildren.enumerated() {
-			if i == sortedChildren.count - 1 {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeOut(withDuration: 1.0)
-				]), completion: completion)
-
-			} else {
-				child.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeOut(withDuration: 1.0)
-				]))
-			}
-		}
-	}
-}
-
-class MusicNodes: SKNode {
-
-	//MARK: Properties
-
-	public var difficulty: GameDifficulties = .easy {
-		didSet {
-			var musicNodeXPos = [CGFloat]()
-
-			switch self.difficulty {
-			case .easy:
-				musicNodeXPos = [0]
-
-			case .normal:
-				musicNodeXPos = [-60, 60]
-
-			case .hard:
-				musicNodeXPos = [-110, 0, 110]
-
-			case .lunatic:
-				musicNodeXPos = [-220, -110, 0, 110, 220]
-			}
-
-			self.removeAllChildren()
-			for xPos in musicNodeXPos {
-				let node = MusicNode()
-				if let customSize = self.userData?.value(forKey: "size") as? Float {
-					node.size = CGFloat(customSize)
-				}
-				node.position.x = xPos
-				self.addChild(node)
-			}
-		}
-	}
-
-	//  MARK: init
-
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-	}
-
-	public func play() {
-		for case let musicNode as MusicNode in self.children {
-			musicNode.play()
-		}
-	}
-
-	public func setPitch() {
-		let shuffled = GKShuffledDistribution(lowestValue: 0,
-		                                      highestValue: 11)
-		for case let musicNode as MusicNode in self.children {
-			switch shuffled.nextInt() {
-			case 0:
-				musicNode.pitch = .a
-
-			case 1:
-				musicNode.pitch = .b
-
-			case 2:
-				musicNode.pitch = .c
-
-			case 3:
-				musicNode.pitch = .d
-
-			case 4:
-				musicNode.pitch = .e
-
-			case 5:
-				musicNode.pitch = .f
-
-			case 6:
-				musicNode.pitch = .g
-
-			case 7:
-				musicNode.pitch = .asharp
-
-			case 8:
-				musicNode.pitch = .csharp
-
-			case 9:
-				musicNode.pitch = .dsharp
-
-			case 10:
-				musicNode.pitch = .fsharp
-
-			case 11:
-				musicNode.pitch = .gsharp
-
-			default:
-				print("nextQuestion(): switch error")
-				return
-			}
-			print(musicNode.pitch)
-			musicNode.awaitAnswer()
-		}
-	}
-
-	public func setColor(color: SKColor?, backgroundColor: SKColor?) {
-		if let c = color {
-			for case let musicNode as MusicNode in self.children {
-				musicNode.color = c
-			}
-		}
-		if let c = backgroundColor {
-			for case let musicNode as MusicNode in self.children {
-				musicNode.backgroundColor = c
-			}
-		}
-	}
-
-	public func checkAnswer(_ selectedPitch: [MusicNodePitch]) -> Int {
-		var point = 0
-
-		if selectedPitch.count > self.children.count {
-			for case let musicNode as MusicNode in self.children {
-				musicNode.error()
-			}
-
-		} else {
-			for case let musicNode as MusicNode in self.children {
-				if selectedPitch.contains(musicNode.pitch) {
-					point += 1
-					musicNode.correct()
-				} else {
-					musicNode.error()
-				}
-			}
-
-			if point > 0 {
-				point = 1
-			}
-		}
-
-		return point
-	}
-
-}
-
-class QuestionScene: MasterScene {
-
-	//MARK: Properties
-
-	var score : Int = 0
+	var score       : Int = 0
 	var questionNum : Int = 1
-	var difficulty : GameDifficulties?
+	var interval    : Int = 100
 
 	private var title          : SKLabelNode?
 	private var musicNodes     : MusicNodes?
@@ -262,7 +21,7 @@ class QuestionScene: MasterScene {
 
 		// Get label nodes from scene and store it for use later
 		self.title          = self.childNode(withName: "//title"     ) as? SKLabelNode
-		self.musicNodes     = self.childNode(withName: "//musicNodes" ) as?
+		self.musicNodes     = self.childNode(withName: "//musicNodes") as?
 			MusicNodes
 		self.confirm        = self.childNode(withName: "//confirm"   ) as? SKLabelNode
 		self.pauseNode      = self.childNode(withName: "//pause"     ) as? SKLabelNode
@@ -274,7 +33,6 @@ class QuestionScene: MasterScene {
 		}
 
 		self.title?.text = "Question " + String(self.questionNum)
-		self.musicNodes?.difficulty = self.difficulty!
 
 		self.appearAnimation {
 			self.nextQuestion()
@@ -322,8 +80,8 @@ class QuestionScene: MasterScene {
 					case "retry":
 						self.retry()
 
-					case "difficulty":
-						self.goToDifficultyScene()
+					case "selectMode":
+						self.goToModeSelectScene()
 
 					case "mainMenu":
 						self.goToStartMenuScene()
@@ -456,9 +214,8 @@ class QuestionScene: MasterScene {
 	}
 
 	private func retry() {
-		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
+		if let scene = SKScene(fileNamed: "SpeedTestScene") as? SpeedTestScene {
 			scene.score = 0
-			scene.difficulty = difficulty
 
 			// Set the scale mode to scale to fit the window
 			scene.scaleMode = .aspectFill
@@ -472,44 +229,30 @@ class QuestionScene: MasterScene {
 
 	//MARK: Scene Transitions
 
-	private func goToDifficultyScene() {
-		if let scene = SKScene(fileNamed: "DifficultyMenuScene") as? DifficultyMenuScene {
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
+	private func goToScene(_ scene : SKScene) {
+		// Set the scale mode to scale to fit the window
+		scene.scaleMode = .aspectFill
+		dismissAnimation {
+			// Present the scene
+			self.view?.presentScene(scene)
 		}
+	}
+
+	private func goToModeSelectScene() {
+		let scene = SKScene(fileNamed: "ModeSelectScene") as! ModeSelectScene
+		self.goToScene(scene)
 	}
 
 	private func goToStartMenuScene() {
-		if let scene = SKScene(fileNamed: "StartMenuScene") as? StartMenuScene {
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
+		let scene = SKScene(fileNamed: "StartMenuScene") as! StartMenuScene
+		self.goToScene(scene)
 	}
 
 	private func goToResultScene(_ message : String) {
-		if let scene = SKScene(fileNamed: "ResultScene") as? ResultScene {
-			scene.score = self.score
-			scene.message = message
-			scene.difficulty = self.difficulty!
-
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
+		let scene = SKScene(fileNamed: "SpeedTestResultScene") as! SpeedTestResultScene
+		scene.score = self.score
+		scene.message = message
+		self.goToScene(scene)
 	}
 
 	//MARK: Animations
@@ -521,20 +264,8 @@ class QuestionScene: MasterScene {
 	}
 
 	private func appearAnimation(_ completion: @escaping () -> Void) {
-		switch self.difficulty! {
-		case .easy:
-			self.colorScheme = .green
 
-		case .normal:
-			self.colorScheme = .blue
-
-		case .hard:
-			self.colorScheme = .red
-
-		case .lunatic:
-			self.colorScheme = .purple
-
-		}
+		self.colorScheme = .green
 
 		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
 
@@ -603,5 +334,230 @@ class QuestionScene: MasterScene {
 			}
 		}
 	}
+}
 
+private class MusicNodes: SKNode {
+
+	//MARK: Properties
+
+	//MARK: init
+
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+
+		var musicNodeXPos = [CGFloat]()
+		musicNodeXPos = [-220, -110, 0, 110, 220]
+
+		self.removeAllChildren()
+		for xPos in musicNodeXPos {
+			let node = MusicNode()
+			if let customSize = self.userData?.value(forKey: "size") as? Float {
+				node.size = CGFloat(customSize)
+			}
+			node.position.x = xPos
+			self.addChild(node)
+		}
+	}
+
+	// MARK: API
+
+	public func play() {
+		for case let musicNode as MusicNode in self.children {
+			musicNode.play()
+		}
+	}
+
+	public func setPitch() {
+		let shuffled = GKShuffledDistribution(lowestValue: 0,
+		                                      highestValue: 11)
+		for case let musicNode as MusicNode in self.children {
+			switch shuffled.nextInt() {
+			case 0:
+				musicNode.pitch = .a
+
+			case 1:
+				musicNode.pitch = .b
+
+			case 2:
+				musicNode.pitch = .c
+
+			case 3:
+				musicNode.pitch = .d
+
+			case 4:
+				musicNode.pitch = .e
+
+			case 5:
+				musicNode.pitch = .f
+
+			case 6:
+				musicNode.pitch = .g
+
+			case 7:
+				musicNode.pitch = .asharp
+
+			case 8:
+				musicNode.pitch = .csharp
+
+			case 9:
+				musicNode.pitch = .dsharp
+
+			case 10:
+				musicNode.pitch = .fsharp
+
+			case 11:
+				musicNode.pitch = .gsharp
+
+			default:
+				print("nextQuestion(): switch error")
+				return
+			}
+			print(musicNode.pitch)
+			musicNode.awaitAnswer()
+		}
+	}
+
+	public func setColor(color: SKColor?, backgroundColor: SKColor?) {
+		if let c = color {
+			for case let musicNode as MusicNode in self.children {
+				musicNode.color = c
+			}
+		}
+		if let c = backgroundColor {
+			for case let musicNode as MusicNode in self.children {
+				musicNode.backgroundColor = c
+			}
+		}
+	}
+
+	public func checkAnswer(_ selectedPitch: [MusicNodePitch]) -> Int {
+		var point = 0
+
+		if selectedPitch.count > self.children.count {
+			for case let musicNode as MusicNode in self.children {
+				musicNode.error()
+			}
+
+		} else {
+			for case let musicNode as MusicNode in self.children {
+				if selectedPitch.contains(musicNode.pitch) {
+					point += 1
+					musicNode.correct()
+				} else {
+					musicNode.error()
+				}
+			}
+
+			if point > 0 {
+				point = 1
+			}
+		}
+
+		return point
+	}
+
+}
+
+private class PauseMenuNode: SKNode {
+
+	//MARK: Properties
+
+	private var retry      : SKLabelNode?
+	private var modeSelect : SKLabelNode?
+	private var mainMenu   : SKLabelNode?
+	private var resume     : SKLabelNode?
+
+	//MARK: init
+
+	override init() {
+		super.init()
+
+		self._init()
+	}
+
+	required public init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+
+		self._init()
+	}
+
+	//MARK: helpers
+
+	private func _init () {
+		self.retry      = self.childNode(withName: "//retry"     ) as? SKLabelNode
+		self.modeSelect = self.childNode(withName: "//modeSelect") as? SKLabelNode
+		self.mainMenu   = self.childNode(withName: "//mainMenu"  ) as? SKLabelNode
+		self.resume     = self.childNode(withName: "//resume"    ) as? SKLabelNode
+	}
+
+	//MARK: API
+
+	public func hide () {
+		self.isHidden = true
+	}
+
+	public func show () {
+		self.isHidden = false
+	}
+
+	public func clicked(_ nodes: [SKNode]) -> SKNode? {
+		return nodes.last
+	}
+
+	public func setColor(_ color: SKColor) {
+		for case let label as SKLabelNode in self.children {
+			label.fontColor = color
+		}
+	}
+
+	//MARK: Animations
+
+	public func appearAnimation () {
+		appearAnimation {
+			print("pause menu appeared")
+		}
+	}
+
+	public func appearAnimation(_ completion: @escaping () -> Void) {
+		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
+		for (i, child) in sortedChildren.enumerated() {
+			child.alpha = 0.0
+			if i == sortedChildren.count - 1 {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeIn(withDuration: 1.0)
+				]), completion: completion)
+
+			} else {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeIn(withDuration: 1.0)
+				]))
+			}
+		}
+	}
+
+	public func dismissAnimation () {
+		dismissAnimation {
+			print("pause menu dismissed")
+		}
+	}
+
+	public func dismissAnimation(_ completion: @escaping () -> Void) {
+		let sortedChildren = self.children.sorted(by: {$0.position.y > $1.position.y})
+		for (i, child) in sortedChildren.enumerated() {
+			if i == sortedChildren.count - 1 {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeOut(withDuration: 1.0)
+				]), completion: completion)
+
+			} else {
+				child.run(SKAction.sequence([
+					SKAction.wait(forDuration: 0.1 * Double(i)),
+					SKAction.fadeOut(withDuration: 1.0)
+				]))
+			}
+		}
+	}
 }

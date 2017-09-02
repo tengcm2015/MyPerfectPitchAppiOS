@@ -1,7 +1,7 @@
 import SpriteKit
 import GameplayKit
 
-class ResultScene: MasterScene {
+class TrainingResultScene: MasterScene {
 
 	//MARK: Properties
 
@@ -47,45 +47,39 @@ class ResultScene: MasterScene {
 			switch name {
 			case "retry":
 				if difficulty != nil {
-					goToQuestionScene(difficulty!)
+					goToTrainingScene(difficulty!)
 				}
-				break
+
 			case "return":
 				goToStartMenuScene()
-				break
+
 			default:
-				break
+				print(name)
 			}
 		}
 	}
 
 	//MARK: Scene Transitions
 
-	private func goToStartMenuScene() {
-		if let scene = SKScene(fileNamed: "StartMenuScene") as? StartMenuScene {
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
+	private func goToScene(_ scene : SKScene) {
+		// Set the scale mode to scale to fit the window
+		scene.scaleMode = .aspectFill
+		dismissAnimation {
+			// Present the scene
+			self.view?.presentScene(scene)
 		}
 	}
 
-	private func goToQuestionScene(_ difficulty : GameDifficulties) {
-		if let scene = SKScene(fileNamed: "QuestionScene") as? QuestionScene {
-			scene.score = 0
-			scene.difficulty = difficulty
+	private func goToStartMenuScene() {
+		let scene = SKScene(fileNamed: "StartMenuScene") as! StartMenuScene
+		self.goToScene(scene)
+	}
 
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
+	private func goToTrainingScene(_ difficulty : GameDifficulties) {
+		let scene = SKScene(fileNamed: "TrainingScene") as! TrainingScene
+		scene.score = 0
+		scene.difficulty = difficulty
+		self.goToScene(scene)
 	}
 
 	//MARK: Animations
