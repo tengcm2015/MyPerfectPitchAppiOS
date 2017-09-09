@@ -9,24 +9,23 @@ class TrainingScene: MasterScene {
 	var questionNum : Int = 1
 	var difficulty : GameDifficulties?
 
-	private var title          : SKLabelNode?
-	private var musicNodes     : MusicNodes?
-	private var confirm        : SKLabelNode?
-	private var pauseNode      : SKLabelNode?
-	private var keyboard       : KeyboardNode?
-	private var pauseMenu      : PauseMenuNode?
+	private var title      : SKLabelNode?
+	private var musicNodes : TrainingSceneMusicNodes?
+	private var confirm    : SKLabelNode?
+	private var pauseNode  : SKLabelNode?
+	private var keyboard   : KeyboardNode?
+	private var pauseMenu  : TrainingScenePauseMenuNode?
 
 	override func didMove(to view: SKView) {
 		super.didMove(to: view)
 
 		// Get label nodes from scene and store it for use later
-		self.title          = self.childNode(withName: "//title"     ) as? SKLabelNode
-		self.musicNodes     = self.childNode(withName: "//musicNodes" ) as?
-			MusicNodes
-		self.confirm        = self.childNode(withName: "//confirm"   ) as? SKLabelNode
-		self.pauseNode      = self.childNode(withName: "//pause"     ) as? SKLabelNode
-		self.keyboard       = self.childNode(withName: "//keyboard"  ) as? KeyboardNode
-		self.pauseMenu      = self.childNode(withName: "//pauseMenu" ) as? PauseMenuNode
+		self.title      = self.childNode(withName: "//title"     ) as? SKLabelNode
+		self.musicNodes = self.childNode(withName: "//musicNodes") as? TrainingSceneMusicNodes
+		self.confirm    = self.childNode(withName: "//confirm"   ) as? SKLabelNode
+		self.pauseNode  = self.childNode(withName: "//pause"     ) as? SKLabelNode
+		self.keyboard   = self.childNode(withName: "//keyboard"  ) as? KeyboardNode
+		self.pauseMenu  = self.childNode(withName: "//pauseMenu" ) as? TrainingScenePauseMenuNode
 
 		if self.pauseMenu != nil {
 			self.pauseMenu?.hide()
@@ -57,9 +56,6 @@ class TrainingScene: MasterScene {
 				if let clicked = keyboard.clicked(tmp){
 					print(clicked.name ?? "x")
 					clicked.toggle()
-				}
-				if let selected = self.keyboard?.selected() {
-					print(selected)
 				}
 
 			case "musicNodes":
@@ -280,9 +276,8 @@ class TrainingScene: MasterScene {
 			if let label = child as? SKLabelNode {
 				label.fontColor = self.frontColor
 
-			} else if let nodes = child as? MusicNodes {
-				nodes.setColor(color: self.frontColor,
-				               backgroundColor: self.middleColor)
+			} else if let nodes = child as? TrainingSceneMusicNodes {
+				nodes.setColor(self.frontColor)
 			}
 
 			if let kbd = child as? KeyboardNode {
@@ -290,7 +285,7 @@ class TrainingScene: MasterScene {
 				kbd.backgroundColor = self.backgroundColor
 				kbd.appearAnimation()
 
-			} else if let menu = child as? PauseMenuNode {
+			} else if let menu = child as? TrainingScenePauseMenuNode {
 				menu.hide()
 				menu.setColor(self.frontColor)
 
@@ -324,26 +319,26 @@ class TrainingScene: MasterScene {
 			if let kbd = child as? KeyboardNode {
 				kbd.dismissAnimation()
 
-			} else if let menu = child as? PauseMenuNode {
+			} else if let menu = child as? TrainingScenePauseMenuNode {
 				menu.dismissAnimation()
 
 			} else if i == sortedChildren.count - 1 {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
+					SKAction.fadeOut(withDuration: 1.0)
 				]), completion: completion)
 
 			} else {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
+					SKAction.fadeOut(withDuration: 1.0)
 				]))
 			}
 		}
 	}
 }
 
-private class MusicNodes: SKNode {
+class TrainingSceneMusicNodes: SKNode {
 
 	//MARK: Properties
 
@@ -393,7 +388,7 @@ private class MusicNodes: SKNode {
 
 	public func setPitch() {
 		let shuffled = GKShuffledDistribution(lowestValue: 0,
-		                                      highestValue: 11)
+											  highestValue: 11)
 		for case let musicNode as MusicNode in self.children {
 			switch shuffled.nextInt() {
 			case 0:
@@ -441,15 +436,10 @@ private class MusicNodes: SKNode {
 		}
 	}
 
-	public func setColor(color: SKColor?, backgroundColor: SKColor?) {
+	public func setColor(_ color: SKColor?) {
 		if let c = color {
 			for case let musicNode as MusicNode in self.children {
 				musicNode.color = c
-			}
-		}
-		if let c = backgroundColor {
-			for case let musicNode as MusicNode in self.children {
-				musicNode.backgroundColor = c
 			}
 		}
 	}
@@ -482,7 +472,7 @@ private class MusicNodes: SKNode {
 
 }
 
-private class PauseMenuNode: SKNode {
+class TrainingScenePauseMenuNode: SKNode {
 
 	//MARK: Properties
 

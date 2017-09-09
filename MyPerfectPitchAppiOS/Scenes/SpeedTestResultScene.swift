@@ -18,11 +18,11 @@ class SpeedTestResultScene: MasterScene {
 		super.didMove(to: view)
 
 		// Get label nodes from scene and store it for use later
-		self.title          = self.childNode(withName: "//title"      ) as? SKLabelNode
-		self.scoreNode      = self.childNode(withName: "//score"      ) as? SKLabelNode
-		self.messageNode    = self.childNode(withName: "//message"    ) as? SKLabelNode
-		self.retry          = self.childNode(withName: "//retry"      ) as? SKLabelNode
-		self.menu           = self.childNode(withName: "//return"     ) as? SKLabelNode
+		self.title       = self.childNode(withName: "//title"      ) as? SKLabelNode
+		self.scoreNode   = self.childNode(withName: "//score"      ) as? SKLabelNode
+		self.messageNode = self.childNode(withName: "//message"    ) as? SKLabelNode
+		self.retry       = self.childNode(withName: "//retry"      ) as? SKLabelNode
+		self.menu        = self.childNode(withName: "//return"     ) as? SKLabelNode
 
 		if let score = self.score {
 			self.scoreNode?.text = String(score)

@@ -7,6 +7,12 @@ class MasterScene: SKScene {
 
 	private var spinnyNode : SKShapeNode?
 
+	override public var children : [SKNode] {
+		get {
+			return super.children.filter { $0.name != self.spinnyNode!.name }
+		}
+	}
+
 	override func didMove(to view: SKView) {
 		// Create shape node to use during mouse interaction
 		let w = (self.size.width + self.size.height) * 0.05
@@ -16,6 +22,7 @@ class MasterScene: SKScene {
 		)
 
 		if let spinnyNode = self.spinnyNode {
+			spinnyNode.name = "spinnyNode"
 			spinnyNode.lineWidth = 2.5
 
 			spinnyNode.run(SKAction.repeatForever(
@@ -31,7 +38,6 @@ class MasterScene: SKScene {
 	}
 
 	public private(set) var frontColor = SKColor.white
-	public private(set) var middleColor = SKColor(white: 1, alpha: 0.5)
 	override public internal(set) var backgroundColor : SKColor {
 		get {
 			return super.backgroundColor
@@ -137,7 +143,9 @@ class MasterScene: SKScene {
 			self.addChild(n)
 		}
 
-		handleClick(self.nodes(at: pos))
+		handleClick(self.nodes(at: pos).filter {
+			$0.name != self.spinnyNode!.name
+		})
 	}
 
 }

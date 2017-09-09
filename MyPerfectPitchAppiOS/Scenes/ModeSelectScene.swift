@@ -98,13 +98,13 @@ class ModeSelectScene: MasterScene {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
 					SKAction.fadeIn(withDuration: 1.0)
-					]), completion: completion)
+				]), completion: completion)
 
 			} else {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
 					SKAction.fadeIn(withDuration: 1.0)
-					]))
+				]))
 			}
 		}
 	}
@@ -123,13 +123,13 @@ class ModeSelectScene: MasterScene {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
 					SKAction.fadeOut(withDuration: 1.0)
-					]), completion: completion)
+				]), completion: completion)
 
 			} else {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
 					SKAction.fadeOut(withDuration: 1.0)
-					]))
+				]))
 			}
 		}
 	}

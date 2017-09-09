@@ -4,19 +4,7 @@ class KeyboardNode: SKNode {
 
 	//MARK: Properties
 
-	private var C    : KeyboardKeyNode?
-	private var D    : KeyboardKeyNode?
-	private var E    : KeyboardKeyNode?
-	private var F    : KeyboardKeyNode?
-	private var G    : KeyboardKeyNode?
-	private var A    : KeyboardKeyNode?
-	private var B    : KeyboardKeyNode?
-	private var Cs   : KeyboardKeyNode?
-	private var Ds   : KeyboardKeyNode?
-	private var Fs   : KeyboardKeyNode?
-	private var Gs   : KeyboardKeyNode?
-	private var As   : KeyboardKeyNode?
-
+	private var KeyNodes = [MusicNodePitch : KeyboardKeyNode]()
 
 	public var color = DefaultConstants.color {
 		didSet {
@@ -51,11 +39,11 @@ class KeyboardNode: SKNode {
 
 	//MARK: helpers
 
-	private func getKeyNode(_ pitch: MusicNodePitch) -> KeyboardKeyNode? {
+	private func assignKeyNode(_ pitch: MusicNodePitch, nodeName: String) {
 		guard
-			let node = self.childNode(withName: "//" + pitch.rawValue) as? KeyboardKeyNode
-			else {
-				return nil
+		let node = self.childNode(withName: "//" + nodeName) as? KeyboardKeyNode
+		else {
+			return
 		}
 
 		node.pitch = pitch
@@ -64,22 +52,22 @@ class KeyboardNode: SKNode {
 			node.size = CGFloat(keySize)
 		}
 
-		return node
+		KeyNodes[pitch] = node
 	}
 
 	private func _init() {
-		self.C    = getKeyNode(.c)
-		self.D    = getKeyNode(.d)
-		self.E    = getKeyNode(.e)
-		self.F    = getKeyNode(.f)
-		self.G    = getKeyNode(.g)
-		self.A    = getKeyNode(.a)
-		self.B    = getKeyNode(.b)
-		self.Cs   = getKeyNode(.csharp)
-		self.Ds   = getKeyNode(.dsharp)
-		self.Fs   = getKeyNode(.fsharp)
-		self.Gs   = getKeyNode(.gsharp)
-		self.As   = getKeyNode(.asharp)
+		self.assignKeyNode(.c, nodeName: "c")
+		self.assignKeyNode(.d, nodeName: "d")
+		self.assignKeyNode(.e, nodeName: "e")
+		self.assignKeyNode(.f, nodeName: "f")
+		self.assignKeyNode(.g, nodeName: "g")
+		self.assignKeyNode(.a, nodeName: "a")
+		self.assignKeyNode(.b, nodeName: "b")
+		self.assignKeyNode(.csharp, nodeName: "cs")
+		self.assignKeyNode(.dsharp, nodeName: "ds")
+		self.assignKeyNode(.fsharp, nodeName: "fs")
+		self.assignKeyNode(.gsharp, nodeName: "gs")
+		self.assignKeyNode(.asharp, nodeName: "as")
 	}
 
 
@@ -101,20 +89,20 @@ class KeyboardNode: SKNode {
 
 	public func appearAnimation(_ completion: @escaping () -> Void) {
 		let sortedChildren = self.children
-			.sorted(by: {$0.position.y > $1.position.y})
+								 .sorted(by: {$0.position.y > $1.position.y})
 		for (i, child) in sortedChildren.enumerated() {
 			child.alpha = 0.0
 			if i == sortedChildren.count - 1 {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
 					SKAction.fadeIn(withDuration: 1.0)
-					]), completion: completion)
+				]), completion: completion)
 
 			} else {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
 					SKAction.fadeIn(withDuration: 1.0)
-					]))
+				]))
 			}
 		}
 	}
@@ -133,13 +121,13 @@ class KeyboardNode: SKNode {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
 					SKAction.fadeOut(withDuration: 1.0)
-					]), completion: completion)
+				]), completion: completion)
 
 			} else {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
 					SKAction.fadeOut(withDuration: 1.0)
-					]))
+				]))
 			}
 		}
 	}
@@ -224,32 +212,7 @@ class KeyboardKeyNode: SKNode {
 
 	public var pitch: MusicNodePitch = .c {
 		didSet {
-			switch self.pitch {
-			case .a:
-				self.label.text = "A"
-			case .b:
-				self.label.text = "B"
-			case .c:
-				self.label.text = "C"
-			case .d:
-				self.label.text = "D"
-			case .e:
-				self.label.text = "E"
-			case .f:
-				self.label.text = "F"
-			case .g:
-				self.label.text = "G"
-			case .asharp:
-				self.label.text = "A#"
-			case .csharp:
-				self.label.text = "C#"
-			case .dsharp:
-				self.label.text = "D#"
-			case .fsharp:
-				self.label.text = "F#"
-			case .gsharp:
-				self.label.text = "G#"
-			}
+			self.label.text = pitch.signature(.english)
 		}
 	}
 

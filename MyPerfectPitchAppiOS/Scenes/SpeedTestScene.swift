@@ -9,24 +9,23 @@ class SpeedTestScene: MasterScene {
 	var questionNum : Int = 1
 	var interval    : Int = 100
 
-	private var title          : SKLabelNode?
-	private var musicNodes     : MusicNodes?
-	private var confirm        : SKLabelNode?
-	private var pauseNode      : SKLabelNode?
-	private var keyboard       : KeyboardNode?
-	private var pauseMenu      : PauseMenuNode?
+	private var title      : SKLabelNode?
+	private var musicNodes : SpeedTestSceneMusicNodes?
+	private var confirm    : SKLabelNode?
+	private var pauseNode  : SKLabelNode?
+	private var keyboard   : KeyboardNode?
+	private var pauseMenu  : SpeedTestScenePauseMenuNode?
 
 	override func didMove(to view: SKView) {
 		super.didMove(to: view)
 
 		// Get label nodes from scene and store it for use later
-		self.title          = self.childNode(withName: "//title"     ) as? SKLabelNode
-		self.musicNodes     = self.childNode(withName: "//musicNodes") as?
-			MusicNodes
-		self.confirm        = self.childNode(withName: "//confirm"   ) as? SKLabelNode
-		self.pauseNode      = self.childNode(withName: "//pause"     ) as? SKLabelNode
-		self.keyboard       = self.childNode(withName: "//keyboard"  ) as? KeyboardNode
-		self.pauseMenu      = self.childNode(withName: "//pauseMenu" ) as? PauseMenuNode
+		self.title      = self.childNode(withName: "//title"     ) as? SKLabelNode
+		self.musicNodes = self.childNode(withName: "//musicNodes") as? SpeedTestSceneMusicNodes
+		self.confirm    = self.childNode(withName: "//confirm"   ) as? SKLabelNode
+		self.pauseNode  = self.childNode(withName: "//pause"     ) as? SKLabelNode
+		self.keyboard   = self.childNode(withName: "//keyboard"  ) as? KeyboardNode
+		self.pauseMenu  = self.childNode(withName: "//pauseMenu" ) as? SpeedTestScenePauseMenuNode
 
 		if self.pauseMenu != nil {
 			self.pauseMenu?.hide()
@@ -56,9 +55,6 @@ class SpeedTestScene: MasterScene {
 				if let clicked = keyboard.clicked(tmp){
 					print(clicked.name ?? "x")
 					clicked.toggle()
-				}
-				if let selected = self.keyboard?.selected() {
-					print(selected)
 				}
 
 			case "musicNodes":
@@ -214,17 +210,9 @@ class SpeedTestScene: MasterScene {
 	}
 
 	private func retry() {
-		if let scene = SKScene(fileNamed: "SpeedTestScene") as? SpeedTestScene {
-			scene.score = 0
-
-			// Set the scale mode to scale to fit the window
-			scene.scaleMode = .aspectFill
-
-			dismissAnimation {
-				// Present the scene
-				self.view?.presentScene(scene)
-			}
-		}
+		let scene = SKScene(fileNamed: "SpeedTestScene") as! SpeedTestScene
+		scene.score = 0
+		self.goToScene(scene)
 	}
 
 	//MARK: Scene Transitions
@@ -273,9 +261,8 @@ class SpeedTestScene: MasterScene {
 			if let label = child as? SKLabelNode {
 				label.fontColor = self.frontColor
 
-			} else if let nodes = child as? MusicNodes {
-				nodes.setColor(color: self.frontColor,
-				               backgroundColor: self.middleColor)
+			} else if let nodes = child as? SpeedTestSceneMusicNodes {
+				nodes.setColor(self.frontColor)
 			}
 
 			if let kbd = child as? KeyboardNode {
@@ -283,7 +270,7 @@ class SpeedTestScene: MasterScene {
 				kbd.backgroundColor = self.backgroundColor
 				kbd.appearAnimation()
 
-			} else if let menu = child as? PauseMenuNode {
+			} else if let menu = child as? SpeedTestScenePauseMenuNode {
 				menu.hide()
 				menu.setColor(self.frontColor)
 
@@ -317,36 +304,36 @@ class SpeedTestScene: MasterScene {
 			if let kbd = child as? KeyboardNode {
 				kbd.dismissAnimation()
 
-			} else if let menu = child as? PauseMenuNode {
+			} else if let menu = child as? SpeedTestScenePauseMenuNode {
 				menu.dismissAnimation()
 
 			} else if i == sortedChildren.count - 1 {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
+					SKAction.fadeOut(withDuration: 1.0)
 				]), completion: completion)
 
 			} else {
 				child.run(SKAction.sequence([
 					SKAction.wait(forDuration: 0.1 * Double(i)),
-					SKAction.fadeIn(withDuration: 1.0)
+					SKAction.fadeOut(withDuration: 1.0)
 				]))
 			}
 		}
 	}
 }
 
-private class MusicNodes: SKNode {
+class SpeedTestSceneMusicNodes: SKNode {
 
 	//MARK: Properties
+
 
 	//MARK: init
 
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 
-		var musicNodeXPos = [CGFloat]()
-		musicNodeXPos = [-220, -110, 0, 110, 220]
+		let musicNodeXPos : [CGFloat] = [-220, -110, 0, 110, 220]
 
 		self.removeAllChildren()
 		for xPos in musicNodeXPos {
@@ -359,7 +346,7 @@ private class MusicNodes: SKNode {
 		}
 	}
 
-	// MARK: API
+	//MARK: API
 
 	public func play() {
 		for case let musicNode as MusicNode in self.children {
@@ -369,7 +356,7 @@ private class MusicNodes: SKNode {
 
 	public func setPitch() {
 		let shuffled = GKShuffledDistribution(lowestValue: 0,
-		                                      highestValue: 11)
+											  highestValue: 11)
 		for case let musicNode as MusicNode in self.children {
 			switch shuffled.nextInt() {
 			case 0:
@@ -417,15 +404,10 @@ private class MusicNodes: SKNode {
 		}
 	}
 
-	public func setColor(color: SKColor?, backgroundColor: SKColor?) {
+	public func setColor(_ color: SKColor?) {
 		if let c = color {
 			for case let musicNode as MusicNode in self.children {
 				musicNode.color = c
-			}
-		}
-		if let c = backgroundColor {
-			for case let musicNode as MusicNode in self.children {
-				musicNode.backgroundColor = c
 			}
 		}
 	}
@@ -458,12 +440,12 @@ private class MusicNodes: SKNode {
 
 }
 
-private class PauseMenuNode: SKNode {
+class SpeedTestScenePauseMenuNode: SKNode {
 
 	//MARK: Properties
 
 	private var retry      : SKLabelNode?
-	private var modeSelect : SKLabelNode?
+	private var selectMode : SKLabelNode?
 	private var mainMenu   : SKLabelNode?
 	private var resume     : SKLabelNode?
 
@@ -485,7 +467,7 @@ private class PauseMenuNode: SKNode {
 
 	private func _init () {
 		self.retry      = self.childNode(withName: "//retry"     ) as? SKLabelNode
-		self.modeSelect = self.childNode(withName: "//modeSelect") as? SKLabelNode
+		self.selectMode = self.childNode(withName: "//selectMode") as? SKLabelNode
 		self.mainMenu   = self.childNode(withName: "//mainMenu"  ) as? SKLabelNode
 		self.resume     = self.childNode(withName: "//resume"    ) as? SKLabelNode
 	}

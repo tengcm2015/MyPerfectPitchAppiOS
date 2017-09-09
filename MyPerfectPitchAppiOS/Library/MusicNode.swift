@@ -25,7 +25,7 @@ class MusicNode : SKNode {
 
 	private let label = SKLabelNode()
 
-	private let shape = SKShapeNode()
+	// private let shape = SKShapeNode()
 
 	public enum MusicNodeState {
 		case waiting, correct, error
@@ -33,15 +33,7 @@ class MusicNode : SKNode {
 
 	public var color = DefaultConstants.color {
 		didSet {
-			self.label.fontColor      = self.color
-			self.shape.strokeColor    = self.color
-			self.countdownNode.color  = self.color
-		}
-	}
-
-	public var backgroundColor = DefaultConstants.backgroundColor {
-		didSet {
-			self.countdownNode.backgroundColor = self.backgroundColor
+			setColor(self.color)
 		}
 	}
 
@@ -53,8 +45,8 @@ class MusicNode : SKNode {
 
 	public var size: CGFloat = MusicNode.Constants.size {
 		didSet {
-			self.label.fontSize	      = self.size / 2
-			self.shape.lineWidth      = self.size / 20
+			self.label.fontSize       = self.size / 2
+			// self.shape.lineWidth      = self.size / 20
 			self.countdownNode.radius = self.size / 2
 			self.countdownNode.width  = self.size / 20
 		}
@@ -100,16 +92,25 @@ class MusicNode : SKNode {
 
 		self.addChild(self.label)
 
-		self.shape.position = CGPoint.zero
+		// self.shape.position = CGPoint.zero
 
-		self.addChild(self.shape)
+		// self.addChild(self.shape)
 
-		self.countdownNode.color = SKColor.white
-		self.countdownNode.backgroundColor = SKColor.darkGray
+		self.countdownNode.color  = self.color
+		self.countdownNode.backgroundColor = self.color
+		                                         .withAlphaComponent(0.5)
 
 		self.addChild(self.countdownNode)
 
 		awaitAnswer()
+	}
+
+	private func setColor(_ color : SKColor) {
+		self.label.fontColor      = color
+		// self.shape.strokeColor    = color
+		self.countdownNode.color  = color
+		self.countdownNode.backgroundColor
+		                          = color.withAlphaComponent(0.5)
 	}
 
 
@@ -174,39 +175,44 @@ class MusicNode : SKNode {
 		self.state = .waiting
 
 		self.label.text = "?"
-		self.label.isHidden = false
-		self.shape.isHidden = true
+		// self.label.isHidden = false
+		// self.shape.isHidden = true
+		self.setColor(self.color)
 	}
 
 	public func correct() {
 		self.state = .correct
 
-		self.label.isHidden = true
-		self.shape.isHidden = false
+		self.label.text = self.pitch.signature(.english)
+		// self.label.isHidden = true
+		// self.shape.isHidden = false
 
-		let shapeSize = self.size / 2 / 1.41421356
-		let path = UIBezierPath()
-		path.move   (to: CGPoint(x: -shapeSize, y: -shapeSize / 3))
-		path.addLine(to: CGPoint(x: -shapeSize / 3, y: -shapeSize))
-		path.addLine(to: CGPoint(x: shapeSize, y: shapeSize))
+		// let shapeSize = self.size / 2 / 1.41421356
+		// let path = UIBezierPath()
+		// path.move   (to: CGPoint(x: -shapeSize, y: -shapeSize / 3))
+		// path.addLine(to: CGPoint(x: -shapeSize / 3, y: -shapeSize))
+		// path.addLine(to: CGPoint(x: shapeSize, y: shapeSize))
 
-		self.shape.path = path.cgPath
+		// self.shape.path = path.cgPath
+		self.setColor(SKColor.green)
 	}
 
 	public func error() {
 		self.state = .error
 
-		self.label.isHidden = true
-		self.shape.isHidden = false
+		self.label.text = self.pitch.signature(.english)
+		// self.label.isHidden = true
+		// self.shape.isHidden = false
 
-		let shapeSize = self.size / 2 / 1.41421356
-		let path = UIBezierPath()
-		path.move   (to: CGPoint(x: shapeSize, y: shapeSize))
-		path.addLine(to: CGPoint(x: -shapeSize, y: -shapeSize))
-		path.move   (to: CGPoint(x: shapeSize, y: -shapeSize))
-		path.addLine(to: CGPoint(x: -shapeSize, y: shapeSize))
+		// let shapeSize = self.size / 2 / 1.41421356
+		// let path = UIBezierPath()
+		// path.move   (to: CGPoint(x: shapeSize, y: shapeSize))
+		// path.addLine(to: CGPoint(x: -shapeSize, y: -shapeSize))
+		// path.move   (to: CGPoint(x: shapeSize, y: -shapeSize))
+		// path.addLine(to: CGPoint(x: -shapeSize, y: shapeSize))
 
-		self.shape.path = path.cgPath
+		// self.shape.path = path.cgPath
+		self.setColor(SKColor.red)
 	}
 }
 
