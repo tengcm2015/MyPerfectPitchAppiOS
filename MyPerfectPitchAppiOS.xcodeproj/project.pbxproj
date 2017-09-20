@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C099F0D1F64FF7100AAF322 /* ProgressNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C099F0C1F64FF7100AAF322 /* ProgressNode.swift */; };
 		9C3E04FB1F11C94600339A92 /* DifficultyMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C3E04F31F11C94600339A92 /* DifficultyMenuScene.sks */; };
 		9C3E04FC1F11C94600339A92 /* DifficultyMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3E04F41F11C94600339A92 /* DifficultyMenuScene.swift */; };
 		9C3E04FD1F11C94600339A92 /* TrainingScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C3E04F51F11C94600339A92 /* TrainingScene.sks */; };
@@ -48,6 +49,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9C099F0C1F64FF7100AAF322 /* ProgressNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressNode.swift; sourceTree = "<group>"; };
 		9C3E04F31F11C94600339A92 /* DifficultyMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = DifficultyMenuScene.sks; path = Scenes/DifficultyMenuScene.sks; sourceTree = "<group>"; };
 		9C3E04F41F11C94600339A92 /* DifficultyMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DifficultyMenuScene.swift; path = Scenes/DifficultyMenuScene.swift; sourceTree = "<group>"; };
 		9C3E04F51F11C94600339A92 /* TrainingScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = TrainingScene.sks; path = Scenes/TrainingScene.sks; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 		9C7E34461F2BDCEA00DD723E /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				9C099F0C1F64FF7100AAF322 /* ProgressNode.swift */,
 				9C622C171F373F3E007DFD49 /* KeyboardNode.swift */,
 				9C7E34491F2C184B00DD723E /* MusicNode.swift */,
 				9CFAC6F01F49DA94003EF27E /* Definitions.swift */,
@@ -287,6 +290,7 @@
 				9CFB39D71F5A360600C9B53B /* TrainingResultScene.swift in Sources */,
 				9C622C181F373F3E007DFD49 /* KeyboardNode.swift in Sources */,
 				9CFB39CF1F5A2F4500C9B53B /* ModeSelectScene.swift in Sources */,
+				9C099F0D1F64FF7100AAF322 /* ProgressNode.swift in Sources */,
 				9CFB39D11F5A2F4500C9B53B /* SpeedTestScene.swift in Sources */,
 				9CB1C3DE1F10663700F3C01A /* GameViewController.swift in Sources */,
 				9C3E04FE1F11C94600339A92 /* TrainingScene.swift in Sources */,

@@ -11,7 +11,6 @@ class SpeedTestScene: MasterScene {
 
 	private var title      : SKLabelNode?
 	private var musicNodes : SpeedTestSceneMusicNodes?
-	private var confirm    : SKLabelNode?
 	private var pauseNode  : SKLabelNode?
 	private var keyboard   : KeyboardNode?
 	private var pauseMenu  : SpeedTestScenePauseMenuNode?
@@ -22,7 +21,6 @@ class SpeedTestScene: MasterScene {
 		// Get label nodes from scene and store it for use later
 		self.title      = self.childNode(withName: "//title"     ) as? SKLabelNode
 		self.musicNodes = self.childNode(withName: "//musicNodes") as? SpeedTestSceneMusicNodes
-		self.confirm    = self.childNode(withName: "//confirm"   ) as? SKLabelNode
 		self.pauseNode  = self.childNode(withName: "//pause"     ) as? SKLabelNode
 		self.keyboard   = self.childNode(withName: "//keyboard"  ) as? KeyboardNode
 		self.pauseMenu  = self.childNode(withName: "//pauseMenu" ) as? SpeedTestScenePauseMenuNode
@@ -53,8 +51,7 @@ class SpeedTestScene: MasterScene {
 				var tmp = nodes
 				tmp.removeLast()
 				if let clicked = keyboard.clicked(tmp){
-					print(clicked.name ?? "x")
-					clicked.toggle()
+					self.musicNodes!.checkAnswer(clicked.pitch)
 				}
 
 			case "musicNodes":
@@ -91,47 +88,6 @@ class SpeedTestScene: MasterScene {
 					}
 				}
 
-			case "confirm":
-				guard let musicNodes = self.musicNodes,
-				      let keyboard = self.keyboard,
-				      let confirmNode = self.confirm
-				else {
-					return
-				}
-
-				if confirmNode.text == "continue" {
-					self.questionNum += 1
-					if self.questionNum > 20 {
-						switch self.score {
-						case 0:
-							self.goToResultScene(":(")
-						case 1..<10:
-							self.goToResultScene("Keep it on!")
-						case 10..<15:
-							self.goToResultScene("Well Done!")
-						case 15..<19:
-							self.goToResultScene("So close!")
-						case 20:
-							self.goToResultScene("Fantastic!")
-						default:
-							self.goToResultScene("WTF!?")
-						}
-					} else {
-						confirmNode.text = "confirm"
-						self.nextQuestion()
-					}
-
-				} else {
-					var selectedPitches = [MusicNodePitch]()
-					let selected = keyboard.selected()
-					for node in selected {
-						selectedPitches.append(node.pitch)
-					}
-
-					self.score += musicNodes.checkAnswer(selectedPitches)
-					confirmNode.text = "continue"
-				}
-
 			case "pause":
 				self.pause()
 
@@ -164,15 +120,6 @@ class SpeedTestScene: MasterScene {
 			self.pauseMenu?.appearAnimation()
 		}
 
-		if let label = self.confirm {
-			label.run(SKAction.sequence([
-				SKAction.wait(forDuration: 0.6),
-				SKAction.fadeOut(withDuration: 1.0)
-			]), completion: {
-				label.isHidden = true
-			})
-		}
-
 		if let label = self.pauseNode {
 			label.run(SKAction.sequence([
 				SKAction.wait(forDuration: 0.8),
@@ -188,15 +135,6 @@ class SpeedTestScene: MasterScene {
 			self.pauseMenu?.hide()
 			self.keyboard?.show()
 			self.keyboard?.appearAnimation()
-
-			if let label = self.confirm {
-				label.alpha = 0.0
-				label.isHidden = false
-				label.run(SKAction.sequence([
-					SKAction.wait(forDuration: 0.6),
-					SKAction.fadeIn(withDuration: 1.0)
-				]))
-			}
 
 			if let label = self.pauseNode {
 				label.alpha = 0.0
@@ -327,15 +265,30 @@ class SpeedTestSceneMusicNodes: SKNode {
 
 	//MARK: Properties
 
+	private var currentIndex : Int = 0
+	private var progressBar : BarProgressNode?
 
 	//MARK: init
 
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 
+		self._init()
+	}
+
+	private func _init() {
+		guard
+			let progressBar = self.childNode(withName: "//progressBar") as? BarProgressNode
+		else {
+			return
+		}
+		self.progressBar = progressBar
+		progressBar.progress = 0
+		progressBar.width = 10
+		progressBar.length = 600
+
 		let musicNodeXPos : [CGFloat] = [-220, -110, 0, 110, 220]
 
-		self.removeAllChildren()
 		for xPos in musicNodeXPos {
 			let node = MusicNode()
 			if let customSize = self.userData?.value(forKey: "size") as? Float {
@@ -344,19 +297,27 @@ class SpeedTestSceneMusicNodes: SKNode {
 			node.position.x = xPos
 			self.addChild(node)
 		}
+
 	}
+
 
 	//MARK: API
 
 	public func play() {
+		self.progressBar?.countup(time: 10, completionHandler: {
+			print("pbar cd done")
+		})
 		for case let musicNode as MusicNode in self.children {
 			musicNode.play()
+			musicNode.countdown(time: 10, completionHandler: {
+				print("musicnode cd done")
+			})
 		}
 	}
 
 	public func setPitch() {
 		let shuffled = GKShuffledDistribution(lowestValue: 0,
-											  highestValue: 11)
+		                                      highestValue: 11)
 		for case let musicNode as MusicNode in self.children {
 			switch shuffled.nextInt() {
 			case 0:
@@ -400,7 +361,7 @@ class SpeedTestSceneMusicNodes: SKNode {
 				return
 			}
 			print(musicNode.pitch)
-			musicNode.awaitAnswer()
+			musicNode.state = .waiting
 		}
 	}
 
@@ -409,32 +370,26 @@ class SpeedTestSceneMusicNodes: SKNode {
 			for case let musicNode as MusicNode in self.children {
 				musicNode.color = c
 			}
+			self.progressBar?.color = c
+			self.progressBar?.backgroundColor = c.withAlphaComponent(0.5)
 		}
 	}
 
-	public func checkAnswer(_ selectedPitch: [MusicNodePitch]) -> Int {
-		var point = 0
-
-		if selectedPitch.count > self.children.count {
-			for case let musicNode as MusicNode in self.children {
-				musicNode.error()
+	public func checkAnswer(_ selectedPitch: MusicNodePitch) -> Int {
+		var point : Int = 0
+		for case let musicNode as MusicNode in self.children {
+			if musicNode.state != .waiting {
+				continue
 			}
 
-		} else {
-			for case let musicNode as MusicNode in self.children {
-				if selectedPitch.contains(musicNode.pitch) {
-					point += 1
-					musicNode.correct()
-				} else {
-					musicNode.error()
-				}
-			}
-
-			if point > 0 {
+			if selectedPitch == musicNode.pitch {
+				musicNode.state = .correct
 				point = 1
+			} else {
+				musicNode.state = .error
 			}
+			break
 		}
-
 		return point
 	}
 

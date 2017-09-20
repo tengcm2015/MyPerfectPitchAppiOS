@@ -1,14 +1,4 @@
-//
-//  MusicNode.swift
-//  SpriteKit extension
-//
-//  Reference: ProgressNode.swift
-//  Created by Tibor Bodecs on 06/02/15.
-//  Copyright (c) 2015 Tibor Bodecs. All rights reserved.
-//
-
 import SpriteKit
-
 
 class MusicNode : SKNode {
 
@@ -21,14 +11,14 @@ class MusicNode : SKNode {
 
 	//MARK: properties
 
-	private let countdownNode = CountdownNode()
+	private let countdownNode = CircleProgressNode()
 
 	private let label = SKLabelNode()
 
 	// private let shape = SKShapeNode()
 
 	public enum MusicNodeState {
-		case waiting, correct, error
+		case waiting, correct, error, disabled
 	}
 
 	public var color = DefaultConstants.color {
@@ -37,7 +27,50 @@ class MusicNode : SKNode {
 		}
 	}
 
-	public private(set) var state : MusicNodeState = .waiting
+	public var state : MusicNodeState = .disabled {
+		didSet {
+			switch self.state {
+			case .waiting:
+				self.setColor(self.color)
+				self.label.text = "?"
+				// self.label.isHidden = false
+				// self.shape.isHidden = true
+
+			case .correct:
+				self.setColor(SKColor.green)
+				self.label.text = self.pitch.signature(.english)
+				// self.label.isHidden = true
+				// self.shape.isHidden = false
+
+				// let shapeSize = self.size / 2 / 1.41421356
+				// let path = UIBezierPath()
+				// path.move   (to: CGPoint(x: -shapeSize, y: -shapeSize / 3))
+				// path.addLine(to: CGPoint(x: -shapeSize / 3, y: -shapeSize))
+				// path.addLine(to: CGPoint(x: shapeSize, y: shapeSize))
+
+				// self.shape.path = path.cgPath
+
+			case .error:
+				self.setColor(SKColor.red)
+				self.label.text = self.pitch.signature(.english)
+				// self.label.isHidden = true
+				// self.shape.isHidden = false
+
+				// let shapeSize = self.size / 2 / 1.41421356
+				// let path = UIBezierPath()
+				// path.move   (to: CGPoint(x: shapeSize, y: shapeSize))
+				// path.addLine(to: CGPoint(x: -shapeSize, y: -shapeSize))
+				// path.move   (to: CGPoint(x: shapeSize, y: -shapeSize))
+				// path.addLine(to: CGPoint(x: -shapeSize, y: shapeSize))
+
+				// self.shape.path = path.cgPath
+
+			case .disabled:
+				self.setColor(self.color)
+				self.label.text = "X"
+			}
+		}
+	}
 
 	public var pitch : MusicNodePitch = .c
 
@@ -96,21 +129,25 @@ class MusicNode : SKNode {
 
 		// self.addChild(self.shape)
 
-		self.countdownNode.color  = self.color
-		self.countdownNode.backgroundColor = self.color
-		                                         .withAlphaComponent(0.5)
-
 		self.addChild(self.countdownNode)
 
-		awaitAnswer()
+		self.setColor(self.color)
+
+		self.label.text = "X"
 	}
 
 	private func setColor(_ color : SKColor) {
-		self.label.fontColor      = color
-		// self.shape.strokeColor    = color
-		self.countdownNode.color  = color
+		if self.state == .disabled {
+			self.label.fontColor      = color.withAlphaComponent(0.5)
+			// self.shape.strokeColor    = color.withAlphaComponent(0.5)
+			self.countdownNode.color  = color.withAlphaComponent(0)
+		} else {
+			self.label.fontColor      = color
+			// self.shape.strokeColor    = color
+			self.countdownNode.color  = color
+		}
 		self.countdownNode.backgroundColor
-		                          = color.withAlphaComponent(0.5)
+		                              = color.withAlphaComponent(0.5)
 	}
 
 
@@ -134,7 +171,7 @@ class MusicNode : SKNode {
 
 	public func stopCountdown() {
 		self.countingDown = false
-		self.countdownNode.stopCountdown()
+		self.countdownNode.stopCount()
 	}
 
 	public func play() {
@@ -169,229 +206,5 @@ class MusicNode : SKNode {
 		self.run(SKAction.playSoundFileNamed(
 			fileName, waitForCompletion: false
 		))
-	}
-
-	public func awaitAnswer() {
-		self.state = .waiting
-
-		self.label.text = "?"
-		// self.label.isHidden = false
-		// self.shape.isHidden = true
-		self.setColor(self.color)
-	}
-
-	public func correct() {
-		self.state = .correct
-
-		self.label.text = self.pitch.signature(.english)
-		// self.label.isHidden = true
-		// self.shape.isHidden = false
-
-		// let shapeSize = self.size / 2 / 1.41421356
-		// let path = UIBezierPath()
-		// path.move   (to: CGPoint(x: -shapeSize, y: -shapeSize / 3))
-		// path.addLine(to: CGPoint(x: -shapeSize / 3, y: -shapeSize))
-		// path.addLine(to: CGPoint(x: shapeSize, y: shapeSize))
-
-		// self.shape.path = path.cgPath
-		self.setColor(SKColor.green)
-	}
-
-	public func error() {
-		self.state = .error
-
-		self.label.text = self.pitch.signature(.english)
-		// self.label.isHidden = true
-		// self.shape.isHidden = false
-
-		// let shapeSize = self.size / 2 / 1.41421356
-		// let path = UIBezierPath()
-		// path.move   (to: CGPoint(x: shapeSize, y: shapeSize))
-		// path.addLine(to: CGPoint(x: -shapeSize, y: -shapeSize))
-		// path.move   (to: CGPoint(x: shapeSize, y: -shapeSize))
-		// path.addLine(to: CGPoint(x: -shapeSize, y: shapeSize))
-
-		// self.shape.path = path.cgPath
-		self.setColor(SKColor.red)
-	}
-}
-
-private class CountdownNode : SKShapeNode {
-
-	//MARK: constants
-
-	struct Constants {
-		static let radius     : CGFloat = 32
-		static let width      : CGFloat = 2.0
-		static let progress   : CGFloat = 0.0
-		static let startAngle : CGFloat = CGFloat(Double.pi)
-		static let actionKey = "_CountdownNodeActionKey"
-	}
-
-
-	//MARK: properties
-
-	/// the radius of the progress node
-	public var radius: CGFloat = CountdownNode.Constants.radius {
-		didSet {
-			self.updateProgress(node: self.timeNode, progress: self.progress)
-			self.updateProgress(node: self)
-		}
-	}
-
-	//the active time color
-	public var color: SKColor = DefaultConstants.color {
-		didSet {
-			self.timeNode.strokeColor = self.color
-			updateProgress(node: self)
-		}
-	}
-
-	//the background color of the timer (to hide: use clear color)
-	public var backgroundColor: SKColor = DefaultConstants.backgroundColor {
-		didSet {
-			self.strokeColor = self.backgroundColor
-			updateProgress(node: self)
-		}
-	}
-
-	///the line width of the progress node
-	public var width: CGFloat = CountdownNode.Constants.width {
-		didSet {
-			self.timeNode.lineWidth = self.width
-			self.lineWidth          = self.width
-		}
-	}
-
-	//the current progress of the progress node end progress is 1.0 and start is 0.0
-	public var progress: CGFloat = CountdownNode.Constants.progress {
-		didSet {
-			self.updateProgress(node: self.timeNode, progress: self.progress)
-		}
-	}
-
-	// the start angle of the progress node
-	public var startAngle: CGFloat = CountdownNode.Constants.startAngle {
-		didSet {
-			self.updateProgress(node: self.timeNode, progress: self.progress)
-		}
-	}
-
-	private let timeNode = SKShapeNode()
-
-
-	//MARK: init
-
-	public init(radius: CGFloat = CountdownNode.Constants.radius,
-	            color: SKColor = DefaultConstants.color,
-	            backgroundColor: SKColor = DefaultConstants.backgroundColor,
-	            width: CGFloat = CountdownNode.Constants.width,
-	            progress: CGFloat = CountdownNode.Constants.progress) {
-
-		self.radius          = radius
-		self.color           = color
-		self.backgroundColor = backgroundColor
-		self.width           = width
-		self.progress        = progress
-
-		super.init()
-
-		self._init()
-	}
-
-	override init() {
-		super.init()
-
-		self._init()
-	}
-
-	required public init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-
-		self._init()
-	}
-
-
-	//MARK: helpers
-
-	private func _init() {
-		self.timeNode.lineWidth   = self.width
-		self.timeNode.strokeColor = self.color
-		self.timeNode.zPosition   = self.zPosition + 1
-		self.timeNode.position    = CGPoint.zero
-
-		self.addChild(self.timeNode)
-		self.updateProgress(node: self.timeNode, progress: self.progress)
-
-		self.lineWidth   = self.width
-		self.strokeColor = self.backgroundColor
-
-		self.updateProgress(node: self)
-	}
-
-	private func updateProgress(node: SKShapeNode, progress: CGFloat = 0.0) {
-		let progress   = 1.0 - progress
-		let startAngle = self.startAngle - CGFloat(.pi / 2.0)
-		let endAngle   = startAngle + progress*CGFloat(2.0 * .pi)
-		node.path      = UIBezierPath(arcCenter: CGPoint.zero,
-		                              radius: self.radius,
-		                              startAngle: startAngle,
-		                              endAngle: endAngle,
-		                              clockwise: true).cgPath
-	}
-
-
-	//MARK: API
-
-	/*!
-	 The countdown method counts down from a time interval to zero,
-	 and it calls a callback on the main thread if its finished
-
-	 :param: time     The time interval to count
-	 :param: progressHandler
-	                  An optional callback method (always called on main thread)
-	 :param: callback An optional callback method (always called on main thread)
-	 */
-	public func countdown(time: TimeInterval = 1.0,
-	                      completionHandler: ((Void) -> Void)?) {
-		self.countdown (
-			time: time, progressHandler: nil,
-			completionHandler: completionHandler
-		)
-	}
-
-	public func countdown(time: TimeInterval = 1.0,
-	                      progressHandler: ((Void) -> Void)?,
-	                      completionHandler: ((Void) -> Void)?) {
-		self.stopCountdown()
-
-		self.run(SKAction.customAction(withDuration: time) {
-			(node: SKNode!, elapsedTime: CGFloat) in
-
-			self.progress = elapsedTime / CGFloat(time)
-
-			if let cb = progressHandler {
-				DispatchQueue.main.async(execute: {
-					cb()
-				})
-			}
-
-			if self.progress == 1.0 {
-				if let cb = completionHandler {
-					DispatchQueue.main.async(execute: {
-						cb()
-					})
-				}
-			}
-
-		}, withKey: CountdownNode.Constants.actionKey)
-	}
-
-	public func stopCountdown() {
-		self.removeAction(forKey: CountdownNode.Constants.actionKey)
-	}
-
-	public func reset() {
-		self.updateProgress(node: self.timeNode)
 	}
 }

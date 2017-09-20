@@ -5,9 +5,9 @@ class TrainingScene: MasterScene {
 
 	//MARK: Properties
 
-	var score : Int = 0
+	var score       : Int = 0
 	var questionNum : Int = 1
-	var difficulty : GameDifficulties?
+	var difficulty  : GameDifficulties?
 
 	private var title      : SKLabelNode?
 	private var musicNodes : TrainingSceneMusicNodes?
@@ -110,7 +110,7 @@ class TrainingScene: MasterScene {
 							self.goToResultScene("Keep it on!")
 						case 10..<15:
 							self.goToResultScene("Well Done!")
-						case 15..<19:
+						case 15..<20:
 							self.goToResultScene("So close!")
 						case 20:
 							self.goToResultScene("Fantastic!")
@@ -383,12 +383,13 @@ class TrainingSceneMusicNodes: SKNode {
 	public func play() {
 		for case let musicNode as MusicNode in self.children {
 			musicNode.play()
+			musicNode.state = .waiting
 		}
 	}
 
 	public func setPitch() {
 		let shuffled = GKShuffledDistribution(lowestValue: 0,
-											  highestValue: 11)
+		                                      highestValue: 11)
 		for case let musicNode as MusicNode in self.children {
 			switch shuffled.nextInt() {
 			case 0:
@@ -432,7 +433,6 @@ class TrainingSceneMusicNodes: SKNode {
 				return
 			}
 			print(musicNode.pitch)
-			musicNode.awaitAnswer()
 		}
 	}
 
@@ -449,16 +449,16 @@ class TrainingSceneMusicNodes: SKNode {
 
 		if selectedPitch.count > self.children.count {
 			for case let musicNode as MusicNode in self.children {
-				musicNode.error()
+				musicNode.state = .error
 			}
 
 		} else {
 			for case let musicNode as MusicNode in self.children {
 				if selectedPitch.contains(musicNode.pitch) {
+					musicNode.state = .correct
 					point += 1
-					musicNode.correct()
 				} else {
-					musicNode.error()
+					musicNode.state = .error
 				}
 			}
 
