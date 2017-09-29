@@ -154,15 +154,15 @@ class MusicNode : SKNode {
 	//MARK: API
 
 	public func countdown(time: TimeInterval = 1.0,
-	                      completionHandler: ((Void) -> Void)?) {
+	                      completionHandler: (() -> Void)?) {
 		self.countingDown = true
 		self.countdownNode.countdown(time: time,
 		                             completionHandler: completionHandler)
 	}
 
 	public func countdown(time: TimeInterval = 1.0,
-	                      progressHandler: ((Void) -> Void)?,
-	                      completionHandler: ((Void) -> Void)?) {
+	                      progressHandler: (() -> Void)?,
+	                      completionHandler: (() -> Void)?) {
 		self.countingDown = true
 		self.countdownNode.countdown(time: time,
 		                             progressHandler: progressHandler,

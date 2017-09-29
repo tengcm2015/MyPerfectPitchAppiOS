@@ -57,7 +57,7 @@ class ProgressNode : SKShapeNode {
 	//MARK: API
 
 	public func countup(time: TimeInterval = 1.0,
-	                    completionHandler: ((Void) -> Void)?) {
+	                    completionHandler: (() -> Void)?) {
 		self.countup (
 			time: time, progressHandler: nil,
 			completionHandler: completionHandler
@@ -65,8 +65,8 @@ class ProgressNode : SKShapeNode {
 	}
 
 	public func countup(time: TimeInterval = 1.0,
-	                    progressHandler: ((Void) -> Void)?,
-	                    completionHandler: ((Void) -> Void)?) {
+	                    progressHandler: (() -> Void)?,
+	                    completionHandler: (() -> Void)?) {
 		self.stopCount()
 
 		self.run(SKAction.customAction(withDuration: time) {
@@ -102,7 +102,7 @@ class ProgressNode : SKShapeNode {
 	*/
 
 	public func countdown(time: TimeInterval = 1.0,
-	                      completionHandler: ((Void) -> Void)?) {
+	                      completionHandler: (() -> Void)?) {
 		self.countdown (
 			time: time, progressHandler: nil,
 			completionHandler: completionHandler
@@ -110,8 +110,8 @@ class ProgressNode : SKShapeNode {
 	}
 
 	public func countdown(time: TimeInterval = 1.0,
-	                      progressHandler: ((Void) -> Void)?,
-	                      completionHandler: ((Void) -> Void)?) {
+	                      progressHandler: (() -> Void)?,
+	                      completionHandler: (() -> Void)?) {
 		self.stopCount()
 
 		self.run(SKAction.customAction(withDuration: time) {
